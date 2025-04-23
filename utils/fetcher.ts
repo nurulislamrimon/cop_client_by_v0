@@ -1,6 +1,7 @@
-// utils/fetcher.ts
+'use server'
 
 import { envConfig } from "@/config/envConfig";
+import { revalidateTag, revalidatePath } from "next/cache";
 
 type FetcherOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -8,6 +9,12 @@ type FetcherOptions = {
   body?: any;
   timeout?: number; // in milliseconds
   authToken?: string;
+  nextCache?: RequestCache;
+  nextTags?: string[];
+
+  // Revalidation after mutation
+  revalidateTags?: string[]; // Invalidate tag(s) after mutation
+  revalidatePaths?: string[]; // Invalidate page path(s) after mutation
 };
 
 export async function fetcher<T = any>(
@@ -20,6 +27,12 @@ export async function fetcher<T = any>(
     body,
     timeout = 10000,
     authToken,
+    nextCache = "default",
+    nextTags,
+
+    // cache revalidation
+    revalidateTags,
+    revalidatePaths,
   } = options;
 
   const controller = new AbortController();
@@ -37,6 +50,8 @@ export async function fetcher<T = any>(
         },
         body: body ? JSON.stringify(body) : undefined,
         signal: controller.signal,
+        cache: nextCache,
+        ...(nextTags ? { next: { tags: nextTags } } : {}),
       }
     );
 
@@ -52,12 +67,25 @@ export async function fetcher<T = any>(
     }
 
     const data: T = await res.json();
+
+    // Perform revalidation only after mutation (not GET)
+    if (method !== "GET") {
+      if (revalidateTags) {
+        for (const tag of revalidateTags) {
+          revalidateTag(tag);
+        }
+      }
+      if (revalidatePaths) {
+        for (const path of revalidatePaths) {
+          revalidatePath(path);
+        }
+      }
+    }
+
     return data;
   } catch (err: any) {
     if (err.name === "AbortError") {
-      throw new Error(
-        "Request timeout: The request took too long to complete."
-      );
+      throw new Error("Request timeout: The request took too long to complete.");
     }
     console.error("Fetch error:", err);
     throw err;
