@@ -1,22 +1,49 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Users, UserCheck, UserCog, DollarSign, TrendingUp } from "lucide-react"
-import Link from "next/link"
-import { useInView } from "react-intersection-observer"
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  ArrowRight,
+  Users,
+  UserCheck,
+  UserCog,
+  DollarSign,
+  TrendingUp,
+} from "lucide-react";
+import Link from "next/link";
+import { useInView } from "react-intersection-observer";
+import { fetcher } from "@/utils/fetcher";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetcher("/member");
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const [statsRef, statsInView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   const [cardsRef, cardsInView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   return (
     <div className="space-y-8">
@@ -26,9 +53,12 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         className="text-center max-w-3xl mx-auto"
       >
-        <h1 className="text-4xl font-bold tracking-tight mb-4">Welcome to Our Co-operative</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-4">
+          Welcome to Our Co-operative
+        </h1>
         <p className="text-xl text-muted-foreground mb-8">
-          Working together for a better future through community ownership and shared prosperity
+          Working together for a better future through community ownership and
+          shared prosperity
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild size="lg">
@@ -52,10 +82,30 @@ export default function Home() {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
       >
         {[
-          { title: "Members", value: "243", icon: Users, color: "bg-blue-100 dark:bg-blue-900" },
-          { title: "Committee Members", value: "12", icon: UserCheck, color: "bg-green-100 dark:bg-green-900" },
-          { title: "Directors", value: "7", icon: UserCog, color: "bg-purple-100 dark:bg-purple-900" },
-          { title: "Total Assets", value: "$1.2M", icon: TrendingUp, color: "bg-amber-100 dark:bg-amber-900" },
+          {
+            title: "Members",
+            value: "243",
+            icon: Users,
+            color: "bg-blue-100 dark:bg-blue-900",
+          },
+          {
+            title: "Committee Members",
+            value: "12",
+            icon: UserCheck,
+            color: "bg-green-100 dark:bg-green-900",
+          },
+          {
+            title: "Directors",
+            value: "7",
+            icon: UserCog,
+            color: "bg-purple-100 dark:bg-purple-900",
+          },
+          {
+            title: "Total Assets",
+            value: "$1.2M",
+            icon: TrendingUp,
+            color: "bg-amber-100 dark:bg-amber-900",
+          },
         ].map((stat, index) => (
           <motion.div
             key={stat.title}
@@ -70,7 +120,9 @@ export default function Home() {
                     <stat.icon className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {stat.title}
+                    </p>
                     <p className="text-3xl font-bold">{stat.value}</p>
                   </div>
                 </div>
@@ -127,7 +179,10 @@ export default function Home() {
                   <CardDescription>{item.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="ghost" className="group w-full justify-start p-0">
+                  <Button
+                    variant="ghost"
+                    className="group w-full justify-start p-0"
+                  >
                     View details
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -148,14 +203,20 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {[
             { title: "Deposits", value: "$345,200", path: "/finance/deposit" },
-            { title: "Withdrawals", value: "$124,800", path: "/finance/withdraw" },
+            {
+              title: "Withdrawals",
+              value: "$124,800",
+              path: "/finance/withdraw",
+            },
             { title: "Profit", value: "$78,500", path: "/finance/profit" },
             { title: "Balance", value: "$1,245,600", path: "/finance/balance" },
           ].map((item, index) => (
             <Link key={item.title} href={item.path}>
               <Card className="cursor-pointer hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
-                  <p className="text-sm font-medium text-muted-foreground">{item.title}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {item.title}
+                  </p>
                   <p className="text-2xl font-bold">{item.value}</p>
                 </CardContent>
               </Card>
@@ -171,5 +232,5 @@ export default function Home() {
         </div>
       </motion.div>
     </div>
-  )
+  );
 }
