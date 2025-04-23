@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import { fetcher } from "@/utils/fetcher";
+import { fetcher } from "@/server_actions/fetcher";
 import { useEffect } from "react";
 
 export default function Home() {
