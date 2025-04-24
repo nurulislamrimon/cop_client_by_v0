@@ -4,16 +4,15 @@ import PageTransition from "@/components/page-transition"
 import { PlusCircle } from "lucide-react"
 import MemberClientComponents from "./__components/MemberClientComponents"
 
-interface MembersPageProps {
-  searchParams: {
-    page?: string
-    limit?: string
-  }
+interface SearchParams {
+  page?: string
+  limit?: string
 }
 
-export default async function MembersPage({ searchParams }: MembersPageProps) {
-  const page = parseInt(await searchParams?.page ?? "1", 10)
-  const limit = parseInt(await searchParams?.limit ?? "10", 10)
+export default async function MembersPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const params = await searchParams
+  const page = parseInt(params.page ?? "1", 10)
+  const limit = parseInt(params.limit ?? "10", 10)
 
   const memberData = await fetcher(`/member?sortOrder=asc&limit=${limit}&page=${page}`)
 

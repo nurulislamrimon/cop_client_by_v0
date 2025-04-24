@@ -1,13 +1,14 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, ChevronLeft, ChevronRight } from "lucide-react"
 import { IMeta } from "@/interfaces/meta"
+import { debounce } from "@/utils/debounce"
 
 interface DataTableProps<T> {
   data: T[]
@@ -31,18 +32,26 @@ export default function DataTable<T extends Record<string, any>>({
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const [searchQuery, setSearchQuery] = useState("")
 
   const currentPage = parseInt(searchParams.get("page") || "1", 10)
   const totalPages = Math.ceil(meta.total / meta.limit)
   const itemsPerPage = meta.limit
   const startIndex = (currentPage - 1) * itemsPerPage
 
-  const updatePageInUrl = (page: number) => {
+  const updateInUrl = (field: string, value: string | number) => {
     const params = new URLSearchParams(searchParams)
-    params.set("page", page.toString())
+    params.set(field, value.toString())
     router.push(`?${params.toString()}`)
   }
+
+
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      updateInUrl("search", value)
+    }, 300),
+    []
+  )
+
 
   return (
     <div className="space-y-4">
@@ -53,9 +62,9 @@ export default function DataTable<T extends Record<string, any>>({
             type="search"
             placeholder="Search..."
             className="pl-8"
-            value={searchQuery}
+            value={searchParams.get("search")?.toString()}
             onChange={(e) => {
-              setSearchQuery(e.target.value)
+              debouncedSearch(e.target.value)
             }}
           />
         </div>
@@ -109,7 +118,7 @@ export default function DataTable<T extends Record<string, any>>({
             <Button
               variant="outline"
               size="icon"
-              onClick={() => updatePageInUrl(currentPage - 1)}
+              onClick={() => updateInUrl('page', currentPage - 1)}
               disabled={currentPage === 1}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -120,7 +129,7 @@ export default function DataTable<T extends Record<string, any>>({
             <Button
               variant="outline"
               size="icon"
-              onClick={() => updatePageInUrl(currentPage + 1)}
+              onClick={() => updateInUrl('page', currentPage + 1)}
               disabled={currentPage === totalPages}
             >
               <ChevronRight className="h-4 w-4" />
