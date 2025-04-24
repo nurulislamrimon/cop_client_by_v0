@@ -68,7 +68,7 @@ export default function PreviewCard({ title, data, backLink, imageSrc, badges = 
                     <p className="text-sm font-medium text-muted-foreground">
                       {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1")}
                     </p>
-                    <p className="font-medium">{value}</p>
+                    <p className="font-medium">{value || "-"}</p>
                   </div>
                 ))}
               </div>
