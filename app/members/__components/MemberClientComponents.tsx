@@ -16,7 +16,7 @@ export default function MemberClientComponents({ members }: { members?: Record<s
     },
     { key: "full_name", title: "Name" },
     { key: "email", title: "Email" },
-    { key: "created_at", title: "Created At" },
+    { key: "joining_date", title: "Joined" },
     {
       key: "status",
       title: "Status",

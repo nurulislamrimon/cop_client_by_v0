@@ -7,7 +7,6 @@ import { fetcher } from "@/server_actions/fetcher"
 
 export default async function MembersPage() {
   const memberData = await fetcher('/member')
-  // console.log(memberData);
 
   return (
     <PageTransition>

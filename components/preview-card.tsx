@@ -54,9 +54,9 @@ export default function PreviewCard({ title, data, backLink, imageSrc, badges = 
                   <AvatarImage src={imageSrc || "/placeholder.svg"} alt={title} />
                   <AvatarFallback className="text-2xl">
                     {title
-                      .split(" ")
-                      .map((word) => word[0])
-                      .join("")}
+                      ?.split(" ")
+                      ?.map((word) => word[0])
+                      ?.join("")}
                   </AvatarFallback>
                 </Avatar>
               </div>
