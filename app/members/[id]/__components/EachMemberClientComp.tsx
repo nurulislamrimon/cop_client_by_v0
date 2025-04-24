@@ -1,5 +1,4 @@
 import PreviewCard from '@/components/preview-card'
-import { useParams } from 'next/navigation'
 import React from 'react'
 
 export default function EachMemberClientComp({ member }: { member: Record<string, unknown> }) {

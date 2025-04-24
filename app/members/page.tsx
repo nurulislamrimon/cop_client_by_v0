@@ -3,14 +3,10 @@ import { Button } from "@/components/ui/button"
 import PageTransition from "@/components/page-transition"
 import { PlusCircle } from "lucide-react"
 import MemberClientComponents from "./__components/MemberClientComponents"
+import { ISearchParams } from "@/interfaces/meta"
 
-interface SearchParams {
-  page?: string
-  limit?: string
-  search?: string
-}
 
-export default async function MembersPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+export default async function MembersPage({ searchParams }: { searchParams: Promise<ISearchParams> }) {
   const params = await searchParams;
   const page = parseInt(params.page ?? "1", 10);
   const limit = parseInt(params.limit ?? "10", 10);

@@ -11,7 +11,7 @@ import { IMeta } from "@/interfaces/meta"
 import { debounce } from "@/utils/debounce"
 
 interface DataTableProps<T> {
-  data: T[]
+  data?: T[]
   meta?: IMeta
   columns: {
     key: string
@@ -62,7 +62,7 @@ export default function DataTable<T extends Record<string, any>>({
   )
 
   useEffect(() => {
-    setSearchQuery(initialSearch) // update state if search param changes externally
+    setSearchQuery(initialSearch)
   }, [initialSearch])
 
   return (
@@ -94,8 +94,8 @@ export default function DataTable<T extends Record<string, any>>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.length > 0 ? (
-              data.map((item, index) => (
+            {data?.length ? (
+              data?.map((item, index) => (
                 <TableRow
                   key={index}
                   onClick={() => onRowClick && onRowClick(item)}
@@ -105,9 +105,7 @@ export default function DataTable<T extends Record<string, any>>({
                     <TableCell key={column.key}>
                       {column.render
                         ? column.render(item)
-                        : column.key === "joining_date"
-                          ? new Date(item[column.key]).toDateString()
-                          : item[column.key]}
+                        : item[column.key]}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -126,7 +124,7 @@ export default function DataTable<T extends Record<string, any>>({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Showing {startIndex + 1}-{Math.min(startIndex + data.length, meta?.total || 1)} of {meta?.total}
+            Showing {startIndex + 1}-{Math.min(startIndex + (data?.length || 1), meta?.total || 1)} of {meta?.total}
           </p>
           <div className="flex items-center space-x-2">
             <Button

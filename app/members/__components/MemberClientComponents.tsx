@@ -36,7 +36,7 @@ export default function MemberClientComponents({ members, meta }: { members?: Re
   return (
     <>
       <DataTable
-        data={members || []}
+        data={members?.map((item: any) => { return { ...item, joining_date: item?.joining_date ? new Date(item?.joining_date).toDateString() : "-" } }) || []}
         meta={meta}
         columns={columns}
         searchKey="full_name"
