@@ -1,12 +1,22 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
-import { Home, Users, UserCheck, UserCog, DollarSign, Menu, X, ChevronDown, ChevronRight } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Home,
+  Users,
+  UserCheck,
+  UserCog,
+  DollarSign,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { name: "Home", path: "/", icon: Home },
@@ -27,31 +37,31 @@ const menuItems = [
       { name: "Balance", path: "/finance/balance" },
     ],
   },
-]
+];
 
 export default function Sidebar() {
-  const pathname = usePathname()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null)
-  const [isMounted, setIsMounted] = useState(false)
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true)
+    setIsMounted(true);
 
     // Close mobile menu when path changes
-    setIsMobileMenuOpen(false)
+    setIsMobileMenuOpen(false);
 
     // Open finance submenu if on a finance page
     if (pathname.startsWith("/finance")) {
-      setOpenSubmenu("Finance")
+      setOpenSubmenu("Finance");
     }
-  }, [pathname])
+  }, [pathname]);
 
-  if (!isMounted) return null
+  if (!isMounted) return null;
 
   const toggleSubmenu = (name: string) => {
-    setOpenSubmenu(openSubmenu === name ? null : name)
-  }
+    setOpenSubmenu(openSubmenu === name ? null : name);
+  };
 
   const sidebarVariants = {
     hidden: { x: -300, opacity: 0 },
@@ -64,7 +74,7 @@ export default function Sidebar() {
         damping: 30,
       },
     },
-  }
+  };
 
   const menuItemVariants = {
     hidden: { opacity: 0, x: -20 },
@@ -76,7 +86,7 @@ export default function Sidebar() {
         duration: 0.5,
       },
     }),
-  }
+  };
 
   const submenuVariants = {
     hidden: { height: 0, opacity: 0 },
@@ -88,7 +98,7 @@ export default function Sidebar() {
         ease: "easeInOut",
       },
     },
-  }
+  };
 
   return (
     <>
@@ -98,7 +108,11 @@ export default function Sidebar() {
         className="fixed top-4 left-4 z-50 md:hidden"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
-        {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        {isMobileMenuOpen ? (
+          <X className="h-5 w-5" />
+        ) : (
+          <Menu className="h-5 w-5" />
+        )}
       </Button>
 
       <AnimatePresence>
@@ -110,17 +124,17 @@ export default function Sidebar() {
             variants={sidebarVariants}
             className={cn(
               "fixed inset-y-0 left-0 z-40 w-64 bg-background border-r p-4 flex flex-col md:relative",
-              isMobileMenuOpen ? "block" : "hidden md:block",
+              isMobileMenuOpen ? "block" : "hidden md:block"
             )}
           >
             <div className="flex items-center justify-center h-16 mb-8">
               <motion.h1
-                className="text-2xl font-bold text-primary"
+                className="text-lg md:text-xl font-bold text-primary"
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                Co-operative
+                Combination of Power
               </motion.h1>
             </div>
 
@@ -137,9 +151,10 @@ export default function Sidebar() {
                         onClick={() => toggleSubmenu(item.name)}
                         className={cn(
                           "flex items-center w-full px-4 py-2 text-left rounded-md hover:bg-accent transition-colors",
-                          pathname === item.path || pathname.startsWith(item.path + "/")
+                          pathname === item.path ||
+                            pathname.startsWith(item.path + "/")
                             ? "bg-accent text-accent-foreground font-medium"
-                            : "text-foreground",
+                            : "text-foreground"
                         )}
                       >
                         <item.icon className="mr-2 h-5 w-5" />
@@ -173,7 +188,7 @@ export default function Sidebar() {
                                     "flex items-center px-4 py-2 text-sm rounded-md hover:bg-accent transition-colors",
                                     pathname === subitem.path
                                       ? "bg-accent/50 text-accent-foreground font-medium"
-                                      : "text-muted-foreground",
+                                      : "text-muted-foreground"
                                   )}
                                 >
                                   {subitem.name}
@@ -193,7 +208,9 @@ export default function Sidebar() {
                         variants={menuItemVariants}
                         className={cn(
                           "flex items-center px-4 py-2 rounded-md hover:bg-accent transition-colors",
-                          pathname === item.path ? "bg-accent text-accent-foreground font-medium" : "text-foreground",
+                          pathname === item.path
+                            ? "bg-accent text-accent-foreground font-medium"
+                            : "text-foreground"
                         )}
                       >
                         <item.icon className="mr-2 h-5 w-5" />
@@ -206,11 +223,13 @@ export default function Sidebar() {
             </nav>
 
             <div className="pt-4 border-t">
-              <p className="text-xs text-muted-foreground text-center">© {new Date().getFullYear()} Co-operative Org</p>
+              <p className="text-xs text-muted-foreground text-center">
+                © {new Date().getFullYear()} Combination of power
+              </p>
             </div>
           </motion.aside>
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }
