@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
@@ -12,7 +12,7 @@ import { debounce } from "@/utils/debounce"
 
 interface DataTableProps<T> {
   data: T[]
-  meta: IMeta
+  meta?: IMeta
   columns: {
     key: string
     title: string
@@ -32,10 +32,12 @@ export default function DataTable<T extends Record<string, any>>({
   const searchParams = useSearchParams()
   const router = useRouter()
 
+  const initialSearch = searchParams.get("search") || ""
+  const [searchQuery, setSearchQuery] = useState(initialSearch)
 
   const currentPage = parseInt(searchParams.get("page") || "1", 10)
-  const totalPages = Math.ceil(meta.total / meta.limit)
-  const itemsPerPage = meta.limit
+  const totalPages = meta ? Math.ceil(meta?.total / meta?.limit) : 1
+  const itemsPerPage = meta?.limit || 10
   const startIndex = (currentPage - 1) * itemsPerPage
 
   const updateInUrl = (field: string, value: string | number) => {
@@ -45,13 +47,23 @@ export default function DataTable<T extends Record<string, any>>({
   }
 
 
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      updateInUrl("search", value)
-    }, 300),
-    []
+  const debouncedUpdateInUrl = useMemo(
+    () =>
+      debounce((value: string) => {
+        const params = new URLSearchParams(searchParams.toString())
+        if (value) {
+          params.set("search", value)
+        } else {
+          params.delete("search")
+        }
+        router.push(`?${params.toString()}`)
+      }, 300),
+    [searchParams, router]
   )
 
+  useEffect(() => {
+    setSearchQuery(initialSearch) // update state if search param changes externally
+  }, [initialSearch])
 
   return (
     <div className="space-y-4">
@@ -62,9 +74,11 @@ export default function DataTable<T extends Record<string, any>>({
             type="search"
             placeholder="Search..."
             className="pl-8"
-            value={searchParams.get("search")?.toString()}
+            value={searchQuery}
             onChange={(e) => {
-              debouncedSearch(e.target.value)
+              const value = e.target.value
+              setSearchQuery(value)
+              debouncedUpdateInUrl(value)
             }}
           />
         </div>
@@ -112,7 +126,7 @@ export default function DataTable<T extends Record<string, any>>({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, meta.total)} of {meta.total}
+            Showing {startIndex + 1}-{Math.min(startIndex + data.length, meta?.total || 1)} of {meta?.total}
           </p>
           <div className="flex items-center space-x-2">
             <Button

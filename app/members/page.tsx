@@ -7,14 +7,16 @@ import MemberClientComponents from "./__components/MemberClientComponents"
 interface SearchParams {
   page?: string
   limit?: string
+  search?: string
 }
 
 export default async function MembersPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const params = await searchParams
-  const page = parseInt(params.page ?? "1", 10)
-  const limit = parseInt(params.limit ?? "10", 10)
+  const params = await searchParams;
+  const page = parseInt(params.page ?? "1", 10);
+  const limit = parseInt(params.limit ?? "10", 10);
+  const search = params.search || "";
 
-  const memberData = await fetcher(`/member?sortOrder=asc&limit=${limit}&page=${page}`)
+  const memberData = await fetcher(`/member?sortOrder=asc&limit=${limit}&page=${page}&searchTerm=${search}`)
 
   return (
     <PageTransition>
