@@ -20,7 +20,9 @@ import {
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 
-const DashboardClientComponents = () => {
+const DashboardClientComponents = ({ data }) => {
+  console.log(data);
+
   const [statsRef, statsInView] = useInView({
     triggerOnce: true,
     threshold: 0.1,

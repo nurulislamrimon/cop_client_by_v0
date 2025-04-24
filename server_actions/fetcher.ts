@@ -66,11 +66,7 @@ export async function fetcher<T = any>(
     let data: T;
     try {
       const result = await res.json();
-      if ("data" in result) {
-        data = result.data;
-      } else {
-        data = result;
-      }
+      data = result;
     } catch {
       const text = await res.text();
       data = text as T;
