@@ -20,9 +20,11 @@ import {
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 
-const DashboardClientComponents = ({ data }) => {
-  console.log(data);
-
+const DashboardClientComponents = ({
+  data,
+}: {
+  data: { members?: number; committee?: number; director?: number };
+}) => {
   const [statsRef, statsInView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -42,7 +44,7 @@ const DashboardClientComponents = ({ data }) => {
         className="text-center max-w-3xl mx-auto"
       >
         <h1 className="text-4xl font-bold tracking-tight mb-4">
-          Welcome to Our Co-operative
+          Welcome to Our Combination of Power
         </h1>
         <p className="text-xl text-muted-foreground mb-8">
           Working together for a better future through community ownership and
@@ -71,25 +73,25 @@ const DashboardClientComponents = ({ data }) => {
         {[
           {
             title: "Members",
-            value: "243",
+            value: data?.members,
             icon: Users,
             color: "bg-blue-100 dark:bg-blue-900",
           },
           {
             title: "Committee Members",
-            value: "12",
+            value: data?.committee,
             icon: UserCheck,
             color: "bg-green-100 dark:bg-green-900",
           },
           {
             title: "Directors",
-            value: "7",
+            value: data?.director,
             icon: UserCog,
             color: "bg-purple-100 dark:bg-purple-900",
           },
           {
             title: "Total Assets",
-            value: "$1.2M",
+            value: "N/A",
             icon: TrendingUp,
             color: "bg-amber-100 dark:bg-amber-900",
           },
