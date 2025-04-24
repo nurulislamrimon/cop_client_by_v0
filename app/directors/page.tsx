@@ -2,7 +2,7 @@ import PageTransition from "@/components/page-transition"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
 import { ISearchParams } from "@/interfaces/meta"
-import { fetcher } from "@/server_actions/fetcher";
+import { fetcher } from "../../server_actions/fetcher";
 import DirectorsClientComps from "./__components/DirectorsClientComps";
 
 export default async function DirectorsPage({ searchParams }: { searchParams: Promise<ISearchParams> }) {

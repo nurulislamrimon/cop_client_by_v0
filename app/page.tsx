@@ -1,4 +1,4 @@
-import { fetcher } from "@/server_actions/fetcher";
+import { fetcher } from "../server_actions/fetcher";
 import DashboardClientComponents from "./__components/DashboardClientComponents";
 
 export default async function Home() {

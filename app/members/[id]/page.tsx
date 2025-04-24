@@ -1,4 +1,4 @@
-import { fetcher } from "@/server_actions/fetcher";
+import { fetcher } from "../../../server_actions/fetcher";
 import EachMemberClientComp from "./__components/EachMemberClientComp";
 
 interface MemberPreviewPageProps {
