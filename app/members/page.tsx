@@ -1,4 +1,4 @@
-import { fetcher } from "../../server_actions/fetcher"
+import { fetcher } from "@/server_actions/fetcher"
 import { Button } from "@/components/ui/button"
 import PageTransition from "@/components/page-transition"
 import { PlusCircle } from "lucide-react"
