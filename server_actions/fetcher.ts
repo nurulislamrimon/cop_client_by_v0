@@ -1,4 +1,4 @@
-'use server'
+"use server";
 
 import { envConfig } from "@/config/envConfig";
 import { revalidateTag, revalidatePath } from "next/cache";
@@ -13,8 +13,8 @@ type FetcherOptions = {
   nextTags?: string[];
 
   // Revalidation after mutation
-  revalidateTags?: string[]; // Invalidate tag(s) after mutation
-  revalidatePaths?: string[]; // Invalidate page path(s) after mutation
+  revalidateTags?: string[];
+  revalidatePaths?: string[];
 };
 
 export async function fetcher<T = any>(
@@ -29,11 +29,13 @@ export async function fetcher<T = any>(
     authToken,
     nextCache = "default",
     nextTags,
-
-    // cache revalidation
     revalidateTags,
     revalidatePaths,
   } = options;
+
+  if (!envConfig.server_url || !envConfig.api || !envConfig.version1) {
+    throw new Error("Missing environment configuration for fetcher.");
+  }
 
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
@@ -44,6 +46,7 @@ export async function fetcher<T = any>(
       {
         method,
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
           ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
           ...headers,
@@ -55,8 +58,6 @@ export async function fetcher<T = any>(
       }
     );
 
-    clearTimeout(id);
-
     if (!res.ok) {
       const errorDetails = await res.json().catch(() => ({}));
       throw new Error(
@@ -66,7 +67,13 @@ export async function fetcher<T = any>(
       );
     }
 
-    const data: T = await res.json();
+    let data: T;
+    try {
+      data = await res.json();
+    } catch {
+      const text = await res.text();
+      data = text as T;
+    }
 
     // Perform revalidation only after mutation (not GET)
     if (method !== "GET") {
@@ -85,9 +92,20 @@ export async function fetcher<T = any>(
     return data;
   } catch (err: any) {
     if (err.name === "AbortError") {
-      throw new Error("Request timeout: The request took too long to complete.");
+      throw new Error(
+        "Request timeout: The request took too long to complete."
+      );
     }
-    console.error("Fetch error:", err);
+
+    console.error("Fetch error details:", {
+      url,
+      method,
+      message: err?.message,
+      error: err,
+    });
+
     throw err;
+  } finally {
+    clearTimeout(id);
   }
 }
