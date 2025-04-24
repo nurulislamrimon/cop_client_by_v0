@@ -7,12 +7,12 @@ type FetcherOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   headers?: HeadersInit;
   body?: any;
-  timeout?: number; // in milliseconds
+  timeout?: number;
   authToken?: string;
   nextCache?: RequestCache;
   nextTags?: string[];
+  revalidate?: number;
 
-  // Revalidation after mutation
   revalidateTags?: string[];
   revalidatePaths?: string[];
 };
@@ -29,6 +29,8 @@ export async function fetcher<T = any>(
     authToken,
     nextCache = "default",
     nextTags,
+    revalidate,
+
     revalidateTags,
     revalidatePaths,
   } = options;
@@ -41,21 +43,28 @@ export async function fetcher<T = any>(
   const id = setTimeout(() => controller.abort(), timeout);
 
   try {
+    const fetchOptions: RequestInit & { next?: { tags?: string[]; revalidate?: number } } = {
+      method,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        ...headers,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
+      cache: nextCache,
+    };
+
+    if (nextTags || typeof revalidate === "number") {
+      fetchOptions.next = {};
+      if (nextTags) fetchOptions.next.tags = nextTags;
+      if (typeof revalidate === "number") fetchOptions.next.revalidate = revalidate;
+    }
+
     const res = await fetch(
       envConfig.server_url + envConfig.api + envConfig.version1 + url,
-      {
-        method,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-          ...headers,
-        },
-        body: body ? JSON.stringify(body) : undefined,
-        signal: controller.signal,
-        cache: nextCache,
-        ...(nextTags ? { next: { tags: nextTags } } : {}),
-      }
+      fetchOptions
     );
 
     if (!res.ok) {
@@ -72,7 +81,6 @@ export async function fetcher<T = any>(
       data = text as T;
     }
 
-    // Perform revalidation only after mutation (not GET)
     if (method !== "GET") {
       if (revalidateTags) {
         for (const tag of revalidateTags) {
@@ -91,7 +99,6 @@ export async function fetcher<T = any>(
     if (err.name === "AbortError") {
       console.log("Request timeout: The request took too long to complete.");
     }
-
     return { success: false, error: err, data: null };
   } finally {
     clearTimeout(id);

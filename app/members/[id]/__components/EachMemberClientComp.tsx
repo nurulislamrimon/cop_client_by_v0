@@ -5,7 +5,7 @@ export default function EachMemberClientComp({ member }: { member: Record<string
 
     return (
         <PreviewCard
-            title={member.name as string}
+            title={member.full_name as string}
             data={{
                 name: member.full_name,
                 email: member.email,
