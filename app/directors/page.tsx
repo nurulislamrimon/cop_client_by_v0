@@ -1,81 +1,18 @@
-"use client"
-
-import { useRouter } from "next/navigation"
 import PageTransition from "@/components/page-transition"
-import DataTable from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
+import { ISearchParams } from "@/interfaces/meta"
+import { fetcher } from "@/server_actions/fetcher";
+import DirectorsClientComps from "./__components/DirectorsClientComps";
 
-// Mock data for directors
-const directors = [
-  {
-    id: "1",
-    name: "Michael Brown",
-    position: "CEO",
-    email: "m.brown@example.com",
-    appointed: "2019-05-10",
-    term: "2025-05-10",
-  },
-  {
-    id: "2",
-    name: "Emily Davis",
-    position: "CFO",
-    email: "emily.d@example.com",
-    appointed: "2019-05-10",
-    term: "2025-05-10",
-  },
-  {
-    id: "3",
-    name: "John Smith",
-    position: "COO",
-    email: "john.smith@example.com",
-    appointed: "2020-01-15",
-    term: "2026-01-15",
-  },
-  {
-    id: "4",
-    name: "Sarah Johnson",
-    position: "CTO",
-    email: "sarah.j@example.com",
-    appointed: "2020-01-15",
-    term: "2026-01-15",
-  },
-  {
-    id: "5",
-    name: "David Martinez",
-    position: "Director of Operations",
-    email: "d.martinez@example.com",
-    appointed: "2021-03-20",
-    term: "2027-03-20",
-  },
-  {
-    id: "6",
-    name: "Patricia Moore",
-    position: "Director of Finance",
-    email: "p.moore@example.com",
-    appointed: "2021-03-20",
-    term: "2027-03-20",
-  },
-  {
-    id: "7",
-    name: "James Taylor",
-    position: "Director of Marketing",
-    email: "j.taylor@example.com",
-    appointed: "2022-06-05",
-    term: "2028-06-05",
-  },
-]
+export default async function DirectorsPage({ searchParams }: { searchParams: Promise<ISearchParams> }) {
 
-export default function DirectorsPage() {
-  const router = useRouter()
+  const params = await searchParams;
+  const page = parseInt(params.page ?? "1", 10);
+  const limit = parseInt(params.limit ?? "10", 10);
+  const search = params.search || "";
 
-  const columns = [
-    { key: "name", title: "Name" },
-    { key: "position", title: "Position" },
-    { key: "email", title: "Email" },
-    { key: "appointed", title: "Appointed" },
-    { key: "term", title: "Term End" },
-  ]
+  const committeeData = await fetcher(`/committee?type_of_committee=director&sortOrder=asc&limit=${limit}&page=${page}&searchTerm=${search}`)
 
   return (
     <PageTransition>
@@ -87,12 +24,7 @@ export default function DirectorsPage() {
             Add Director
           </Button>
         </div>
-        <DataTable
-          data={directors}
-          columns={columns}
-          searchKey="name"
-          onRowClick={(director) => router.push(`/directors/${director.id}`)}
-        />
+        <DirectorsClientComps directors={committeeData?.data} />
       </div>
     </PageTransition>
   )

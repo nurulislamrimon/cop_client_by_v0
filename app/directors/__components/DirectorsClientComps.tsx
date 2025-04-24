@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import React from 'react'
 import DataTable from '@/components/data-table'
 
-export default function CommitteeClientComps({ committees }: { committees: Record<string, unknown>[] }) {
+export default function DirectorsClientComps({ directors }: { directors: Record<string, unknown>[] }) {
     const router = useRouter()
     const columns = [
         { key: "id", title: "ID" },
@@ -16,7 +16,7 @@ export default function CommitteeClientComps({ committees }: { committees: Recor
     return (
         <>
             <DataTable
-                data={committees?.map((item: any) => ({
+                data={directors?.map((item: any) => ({
                     ...item,
                     selected_at: item.selected_at ? new Date(item.selected_at).toDateString() : "-",
                     valid_till: item.valid_till ? new Date(item.valid_till).toDateString() : "-",
