@@ -20,7 +20,7 @@ type FetcherOptions = {
 export async function fetcher<T = any>(
   url: string,
   options: FetcherOptions = {}
-): Promise<T> {
+): Promise<{ success?: boolean; data: unknown } | T> {
   const {
     method = "GET",
     headers = {},
@@ -69,7 +69,12 @@ export async function fetcher<T = any>(
 
     let data: T;
     try {
-      data = await res.json();
+      const result = await res.json();
+      if ("data" in result) {
+        data = result.data;
+      } else {
+        data = result;
+      }
     } catch {
       const text = await res.text();
       data = text as T;
@@ -92,9 +97,7 @@ export async function fetcher<T = any>(
     return data;
   } catch (err: any) {
     if (err.name === "AbortError") {
-      throw new Error(
-        "Request timeout: The request took too long to complete."
-      );
+      console.log("Request timeout: The request took too long to complete.");
     }
 
     console.error("Fetch error details:", {
@@ -104,7 +107,7 @@ export async function fetcher<T = any>(
       error: err,
     });
 
-    throw err;
+    return { success: false, data: null };
   } finally {
     clearTimeout(id);
   }
