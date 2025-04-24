@@ -30,7 +30,7 @@ export default function DataTable<T extends Record<string, any>>({
   const itemsPerPage = 10
 
   const filteredData = searchKey
-    ? data.filter((item) => item[searchKey].toLowerCase().includes(searchQuery.toLowerCase()))
+    ? data.filter((item) => item[searchKey]?.toLowerCase()?.includes(searchQuery?.toLowerCase()))
     : data
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage)
@@ -73,7 +73,7 @@ export default function DataTable<T extends Record<string, any>>({
                   className={onRowClick ? "cursor-pointer hover:bg-muted" : ""}
                 >
                   {columns.map((column) => (
-                    <TableCell key={column.key}>{column.render ? column.render(item) : item[column.key]}</TableCell>
+                    <TableCell key={column.key}>{column.render ? column.render(item) : column.key === 'created_at' ? new Date(item[column.key]).toDateString() : item[column.key]}</TableCell>
                   ))}
                 </TableRow>
               ))
