@@ -1,12 +1,21 @@
-import PageTransition from "@/components/page-transition"
+import { fetcher } from "@/server_actions/fetcher"
 import { Button } from "@/components/ui/button"
+import PageTransition from "@/components/page-transition"
 import { PlusCircle } from "lucide-react"
 import MemberClientComponents from "./__components/MemberClientComponents"
-import { fetcher } from "@/server_actions/fetcher"
 
+interface MembersPageProps {
+  searchParams: {
+    page?: string
+    limit?: string
+  }
+}
 
-export default async function MembersPage() {
-  const memberData = await fetcher('/member')
+export default async function MembersPage({ searchParams }: MembersPageProps) {
+  const page = parseInt(await searchParams?.page ?? "1", 10)
+  const limit = parseInt(await searchParams?.limit ?? "10", 10)
+
+  const memberData = await fetcher(`/member?sortOrder=asc&limit=${limit}&page=${page}`)
 
   return (
     <PageTransition>
@@ -18,7 +27,7 @@ export default async function MembersPage() {
             Add Member
           </Button>
         </div>
-        <MemberClientComponents members={memberData?.data} />
+        <MemberClientComponents members={memberData?.data} meta={memberData?.meta} />
       </div>
     </PageTransition>
   )

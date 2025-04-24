@@ -2,9 +2,10 @@
 import React from 'react'
 import { useRouter } from "next/navigation"
 import DataTable from '@/components/data-table'
+import { IMeta } from '@/interfaces/meta'
 
 
-export default function MemberClientComponents({ members }: { members?: Record<string, unknown>[] }) {
+export default function MemberClientComponents({ members, meta }: { members?: Record<string, unknown>[], meta: IMeta }) {
   const status = "Active"
   const router = useRouter()
 
@@ -36,6 +37,7 @@ export default function MemberClientComponents({ members }: { members?: Record<s
     <>
       <DataTable
         data={members || []}
+        meta={meta}
         columns={columns}
         searchKey="full_name"
         onRowClick={(member) => router.push(`/members/${member.id}`)}
