@@ -8,32 +8,32 @@ const adminRoutes = ["/admin"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
-  const token = req.cookies.get("accessToken")?.value
-  const user = req.cookies.get("isLoggedIn")?.value
+  const userData = req.cookies.get("user")?.value
 
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
 
-  if (isProtected && !token) {
+  if (isProtected && !userData) {
     const loginUrl = new URL("/login", req.url)
     loginUrl.searchParams.set("redirect", pathname)
 
     return NextResponse.redirect(loginUrl)
   }
-  console.log(token, user && JSON.parse(user as string))
 
-  if (token) {
+
+  if (userData) {
     try {
-      // const user = await verifyAuthToken(token)
 
-      // // Optional: protect admin-only routes
-      // if (isAdminRoute && user?.role !== "admin") {
-      //   return NextResponse.redirect(new URL("/unauthorized", req.url))
-      // }
+      const user = userData && JSON.parse(userData as string)
 
-      // // You can also attach user info to the request
-      // const requestHeaders = new Headers(req.headers)
-      // requestHeaders.set("x-user-id", user.id)
-      // return NextResponse.next({ request: { headers: requestHeaders } })
+      // Optional: protect admin-only routes
+      if (user && user?.role !== "super_admin") {
+        return NextResponse.redirect(new URL("/unauthorized", req.url))
+      }
+
+      // You can also attach user info to the request
+      const requestHeaders = new Headers(req.headers)
+      requestHeaders.set("x-user-id", user.id)
+      return NextResponse.next({ request: { headers: requestHeaders } })
 
       return NextResponse.next()
     } catch (error) {

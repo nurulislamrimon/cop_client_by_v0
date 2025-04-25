@@ -58,7 +58,7 @@ export async function logoutAction(): Promise<{ success: boolean; message: strin
             name: 'user',
             value: '',
             path: '/',
-            maxAge: accessTokenValidity,
+            maxAge: 0,
         })
 
         return { success: true, message: 'Logged out successfully' }
