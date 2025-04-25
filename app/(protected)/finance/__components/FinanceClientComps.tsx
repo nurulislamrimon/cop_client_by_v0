@@ -7,6 +7,7 @@ import PageTransition from "@/components/page-transition"
 import { useInView } from "react-intersection-observer"
 import YearlyMonthlyFinanceStatistics from "./YearlyMonthlyFinanceStatistics"
 import { Suspense } from "react"
+import { currency } from "@/config/constants/common.constants"
 
 export default function FinanceOverviewPageClientComps({ balance, statistics, accessToken }: { balance?: number; statistics?: Record<string, number>, accessToken?: string }) {
 
@@ -32,28 +33,28 @@ export default function FinanceOverviewPageClientComps({ balance, statistics, ac
           {[
             {
               title: "Present Balance",
-              value: balance,
+              value: balance + currency,
               icon: Banknote,
               color: "text-green-500",
               bgColor: "bg-green-100 dark:bg-green-900",
             },
             {
               title: "Total Deposit",
-              value: statistics?.total_deposit_amount,
+              value: statistics?.total_deposit_amount + currency,
               icon: ArrowUp,
               color: "text-blue-500",
               bgColor: "bg-blue-100 dark:bg-blue-900",
             },
             {
               title: "Total Withdraw",
-              value: statistics?.total_withdraw_amount,
+              value: statistics?.total_withdraw_amount + currency,
               icon: ArrowDown,
               color: "text-red-500",
               bgColor: "bg-red-200 dark:bg-emerald-900",
             },
             {
               title: "Total Profit",
-              value: statistics?.total_profit_amount,
+              value: statistics?.total_profit_amount + currency,
               icon: ArrowUp,
               color: "text-purple-500",
               bgColor: "bg-purple-100 dark:bg-purple-900",
