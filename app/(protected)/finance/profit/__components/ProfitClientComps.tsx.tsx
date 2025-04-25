@@ -12,7 +12,7 @@ import PageTransition from "@/components/page-transition"
 import { fetcher } from "@/server_actions/fetcher"
 import { currency } from "@/constants/common.constants"
 
-type Deposit = {
+type Profit = {
   id: number
   amount: number
   collected_at: string
@@ -22,19 +22,19 @@ type Deposit = {
   note: string | null
 }
 
-export default function DepositClientComps({ accessToken }: { accessToken?: string }) {
+export default function ProfitClientComps({ accessToken }: { accessToken?: string }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [sortType, setSortType] = useState("recent")
-  const [deposits, setDeposits] = useState<Deposit[]>([])
+  const [profits, setProfits] = useState<Profit[]>([])
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
 
   useEffect(() => {
-    const getDeposits = async () => {
+    const getProfits = async () => {
       setLoading(true)
 
-      let query = `/transaction?trx_type=Deposit`
+      let query = `/transaction?trx_type=Profit`
 
       if (sortType === "amountasc") {
         query += "&sortBy=amount&&sortOrder=asc"
@@ -56,21 +56,21 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
 
       const data = await fetcher(query, { authToken: accessToken })
 
-      setDeposits(data?.data || [])
+      setProfits(data?.data || [])
       setLoading(false)
     }
 
-    getDeposits()
+    getProfits()
   }, [accessToken, sortType, searchQuery, startDate, endDate])
 
   return (
     <PageTransition>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tight">Deposits</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Profits</h1>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            New Deposit
+            New Profit
           </Button>
         </div>
 
@@ -78,8 +78,8 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
           <TabsContent value="all" className="mt-4 space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Deposit History</CardTitle>
-                <CardDescription>View all deposits made by members</CardDescription>
+                <CardTitle>Profit History</CardTitle>
+                <CardDescription>View all profits made by members</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -88,7 +88,7 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         type="search"
-                        placeholder="Search deposits..."
+                        placeholder="Search profits..."
                         className="pl-8"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -137,22 +137,22 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                         {loading ? (
                           <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center">
-                              Loading deposits...
+                              Loading profits...
                             </TableCell>
                           </TableRow>
-                        ) : deposits.length > 0 ? (
-                          deposits.map((deposit) => (
-                            <TableRow key={deposit.id}>
-                              <TableCell>{new Date(deposit.collected_at).toDateString()}</TableCell>
-                              <TableCell>{deposit?.member?.full_name}</TableCell>
-                              <TableCell className="font-medium">{(deposit.amount.toFixed(2)) + currency}</TableCell>
-                              <TableCell>{deposit.note || "-"}</TableCell>
+                        ) : profits.length > 0 ? (
+                          profits.map((profit) => (
+                            <TableRow key={profit.id}>
+                              <TableCell>{new Date(profit.collected_at).toDateString()}</TableCell>
+                              <TableCell>{profit?.member?.full_name}</TableCell>
+                              <TableCell className="font-medium">${(profit.amount.toFixed(2)) + currency}</TableCell>
+                              <TableCell>{profit.note || "-"}</TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center">
-                              No deposits found.
+                              No profits found.
                             </TableCell>
                           </TableRow>
                         )}

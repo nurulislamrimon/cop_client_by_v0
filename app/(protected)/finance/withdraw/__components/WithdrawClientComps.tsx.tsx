@@ -12,7 +12,7 @@ import PageTransition from "@/components/page-transition"
 import { fetcher } from "@/server_actions/fetcher"
 import { currency } from "@/constants/common.constants"
 
-type Deposit = {
+type Withdraw = {
   id: number
   amount: number
   collected_at: string
@@ -22,19 +22,19 @@ type Deposit = {
   note: string | null
 }
 
-export default function DepositClientComps({ accessToken }: { accessToken?: string }) {
+export default function WithdrawClientComps({ accessToken }: { accessToken?: string }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [sortType, setSortType] = useState("recent")
-  const [deposits, setDeposits] = useState<Deposit[]>([])
+  const [withdraws, setWithdraws] = useState<Withdraw[]>([])
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
 
   useEffect(() => {
-    const getDeposits = async () => {
+    const getWithdraws = async () => {
       setLoading(true)
 
-      let query = `/transaction?trx_type=Deposit`
+      let query = `/transaction?trx_type=Withdraw`
 
       if (sortType === "amountasc") {
         query += "&sortBy=amount&&sortOrder=asc"
@@ -56,21 +56,21 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
 
       const data = await fetcher(query, { authToken: accessToken })
 
-      setDeposits(data?.data || [])
+      setWithdraws(data?.data || [])
       setLoading(false)
     }
 
-    getDeposits()
+    getWithdraws()
   }, [accessToken, sortType, searchQuery, startDate, endDate])
 
   return (
     <PageTransition>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tight">Deposits</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Withdraws</h1>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            New Deposit
+            New Withdraw
           </Button>
         </div>
 
@@ -78,8 +78,8 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
           <TabsContent value="all" className="mt-4 space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Deposit History</CardTitle>
-                <CardDescription>View all deposits made by members</CardDescription>
+                <CardTitle>Withdraw History</CardTitle>
+                <CardDescription>View all withdraws made by members</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -88,7 +88,7 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         type="search"
-                        placeholder="Search deposits..."
+                        placeholder="Search withdraws..."
                         className="pl-8"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -137,22 +137,22 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                         {loading ? (
                           <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center">
-                              Loading deposits...
+                              Loading withdraws...
                             </TableCell>
                           </TableRow>
-                        ) : deposits.length > 0 ? (
-                          deposits.map((deposit) => (
-                            <TableRow key={deposit.id}>
-                              <TableCell>{new Date(deposit.collected_at).toDateString()}</TableCell>
-                              <TableCell>{deposit?.member?.full_name}</TableCell>
-                              <TableCell className="font-medium">{(deposit.amount.toFixed(2)) + currency}</TableCell>
-                              <TableCell>{deposit.note || "-"}</TableCell>
+                        ) : withdraws.length > 0 ? (
+                          withdraws.map((withdraw) => (
+                            <TableRow key={withdraw.id}>
+                              <TableCell>{new Date(withdraw.collected_at).toDateString()}</TableCell>
+                              <TableCell>{withdraw?.member?.full_name}</TableCell>
+                              <TableCell className="font-medium">${(withdraw.amount.toFixed(2)) + currency}</TableCell>
+                              <TableCell>{withdraw.note || "-"}</TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center">
-                              No deposits found.
+                              No withdraws found.
                             </TableCell>
                           </TableRow>
                         )}
