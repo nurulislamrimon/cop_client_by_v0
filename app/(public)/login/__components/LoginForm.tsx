@@ -8,8 +8,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { loginAction } from "@/server_actions/auth.server_action"
+import { useAuth } from "@/context/AuthContext"
 
 export default function LoginForm() {
+    const { setIsLoggedIn } = useAuth()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
@@ -25,6 +27,9 @@ export default function LoginForm() {
             const data = await loginAction({ email, password })
             if (data.success) {
                 toast.success("Login successful!")
+                if (data?.data) {
+                    setIsLoggedIn(data?.data?.user)
+                }
                 router.push(callbackUrl)
             } else {
                 const errorMessages = data.error?.errorMessages

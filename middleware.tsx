@@ -9,12 +9,7 @@ const adminRoutes = ["/admin"]
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const token = req.cookies.get("accessToken")?.value
-  const user = req.cookies.get("user")?.value
-
-  const protectedRoutes = ["/dashboard", "/committee", "/members"]
-  const adminRoutes = ["/admin"]
-
-  console.dir(JSON.parse(user as string), { depth: null })
+  const user = req.cookies.get("isLoggedIn")?.value
 
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
 
@@ -24,6 +19,7 @@ export async function middleware(req: NextRequest) {
 
     return NextResponse.redirect(loginUrl)
   }
+  console.log(token, user && JSON.parse(user as string))
 
   if (token) {
     try {

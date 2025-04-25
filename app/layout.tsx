@@ -21,22 +21,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex min-h-screen flex-col md:flex-row">
-            <Sidebar />
-            <main className="flex-1 p-4 md:p-8">{children}</main>
-          </div>
-        </ThemeProvider>
-        <Toaster />
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex min-h-screen flex-col md:flex-row">
+              <Sidebar />
+              <main className="flex-1 p-4 md:p-8">{children}</main>
+            </div>
+          </ThemeProvider>
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );
 }
 
 import "./globals.css"; import { Toaster } from "sonner";
+import { AuthProvider } from "@/context/AuthContext";
 

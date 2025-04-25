@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
+import { logoutAction } from "@/server_actions/auth.server_action";
 
 const menuItems = [
   { name: "Home", path: "/", icon: Home },
@@ -44,6 +46,8 @@ export default function Sidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useAuth()
+
 
   useEffect(() => {
     setIsMounted(true);
@@ -222,11 +226,25 @@ export default function Sidebar() {
               ))}
             </nav>
 
-            <div className="pt-4 border-t">
-              <p className="text-xs text-muted-foreground text-center">
+            <div className="mt-auto pt-4 border-t">
+              <p className="text-xs text-muted-foreground text-center mb-4">
                 © {new Date().getFullYear()} Combination of power
               </p>
+              {isLoggedIn && (
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={async () => {
+                    await logoutAction()
+                    setIsLoggedIn(null)
+                  }}
+                >
+                  Logout
+                </Button>
+              )}
             </div>
+
+
           </motion.aside>
         )}
       </AnimatePresence>
