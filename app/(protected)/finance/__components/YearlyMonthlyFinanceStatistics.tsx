@@ -154,7 +154,7 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
                 initial={{ opacity: 0, y: 20 }}
                 animate={cardsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5"
             >
                 <Card>
                     <CardHeader>
