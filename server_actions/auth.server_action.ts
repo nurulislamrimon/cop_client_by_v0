@@ -9,6 +9,7 @@ type LoginPayload = {
     password: string
 }
 
+// login
 export async function loginAction({ email, password }: LoginPayload): Promise<{ success: boolean; message: string; error?: any }> {
     const result = await fetcher("/member/login", {
         method: "POST",
@@ -26,9 +27,46 @@ export async function loginAction({ email, password }: LoginPayload): Promise<{ 
             secure: process.env.NODE_ENV === 'production',
             maxAge: accessTokenValidity,
         })
-
+        cookieStore.set({
+            name: 'user',
+            value: JSON.stringify(result.data.user),
+            httpOnly: true,
+            path: '/',
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: accessTokenValidity,
+        })
         return { success: true, message: 'Logged in successfully' }
     }
 
     return result
+}
+
+// logout 
+export async function logoutAction(): Promise<{ success: boolean; message: string }> {
+    try {
+        const cookieStore = await cookies()
+
+        cookieStore.set({
+            name: 'accessToken',
+            value: '',
+            path: '/',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 0,
+        })
+
+
+        cookieStore.set({
+            name: 'user',
+            value: '',
+            path: '/',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 0,
+        })
+
+        return { success: true, message: 'Logged out successfully' }
+    } catch (error) {
+        return { success: false, message: 'Failed to logout' }
+    }
 }
