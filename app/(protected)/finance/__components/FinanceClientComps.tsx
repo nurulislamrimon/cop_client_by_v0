@@ -7,7 +7,7 @@ import PageTransition from "@/components/page-transition"
 import { useInView } from "react-intersection-observer"
 import YearlyMonthlyFinanceStatistics from "./YearlyMonthlyFinanceStatistics"
 import { Suspense } from "react"
-import { currency } from "@/config/constants/common.constants"
+import { currency } from "@/constants/common.constants"
 
 export default function FinanceOverviewPageClientComps({ balance, statistics, accessToken }: { balance?: number; statistics?: Record<string, number>, accessToken?: string }) {
 

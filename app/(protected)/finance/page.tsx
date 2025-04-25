@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { fetcher } from "@/server_actions/fetcher";
 import FinanceOverviewPageClientComps from "./__components/FinanceClientComps";
-import { revalidationTime } from "@/config/constants/common.constants";
+import { revalidationTime } from "@/constants/common.constants";
 
 export default async function FinanceOverviewPage() {
   const cookieStore = await cookies();

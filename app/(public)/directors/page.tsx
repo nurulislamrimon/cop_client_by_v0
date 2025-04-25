@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react"
 import { ISearchParams } from "@/interfaces/meta"
 import { fetcher } from "@/server_actions/fetcher";
 import DirectorsClientComps from "./__components/DirectorsClientComps";
-import { revalidationTime } from "@/config/constants/common.constants";
+import { revalidationTime } from "@/constants/common.constants";
 
 export default async function DirectorsPage({ searchParams }: { searchParams: Promise<ISearchParams> }) {
 

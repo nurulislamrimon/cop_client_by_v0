@@ -1,4 +1,4 @@
-import { revalidationTimeLong } from '@/config/constants/common.constants';
+import { revalidationTimeLong } from '@/constants/common.constants';
 import { fetcher } from '@/server_actions/fetcher';
 import CommitteeViewIdClientComps from './__components/CommitteeViewIdClientComps';
 

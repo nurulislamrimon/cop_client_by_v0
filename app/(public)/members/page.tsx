@@ -4,7 +4,7 @@ import PageTransition from "@/components/page-transition"
 import { PlusCircle } from "lucide-react"
 import MemberClientComponents from "./__components/MemberClientComponents"
 import { ISearchParams } from "@/interfaces/meta"
-import { revalidationTime } from "@/config/constants/common.constants"
+import { revalidationTime } from "@/constants/common.constants"
 
 
 export default async function MembersPage({ searchParams }: { searchParams: Promise<ISearchParams> }) {

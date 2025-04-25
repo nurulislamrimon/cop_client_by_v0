@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers'
 import { fetcher } from './fetcher'
-import { accessTokenValidity } from '@/config/constants/common.constants'
+import { accessTokenValidity } from '@/constants/common.constants'
 
 type LoginPayload = {
     email: string

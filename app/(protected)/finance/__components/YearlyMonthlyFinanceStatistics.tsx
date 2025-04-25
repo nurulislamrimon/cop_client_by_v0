@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useInView } from "react-intersection-observer"
 import { ArrowDown, ArrowUp, TrendingDown, TrendingUp } from "lucide-react"
 import { fetcher } from '@/server_actions/fetcher'
-import { currency, revalidationTime } from '@/config/constants/common.constants'
+import { currency, revalidationTime } from '@/constants/common.constants'
 
 export default function YearlyMonthlyFinanceStatistics({ accessToken }: { accessToken?: string }) {
     const [yearlyStats, setYearlyStats] = useState<any>(null);
