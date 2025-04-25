@@ -1,5 +1,5 @@
 import { fetcher } from "@/server_actions/fetcher";
-import DashboardClientComponents from "./__components/DashboardClientComponents";
+import DashboardClientComponents from "./(public)/__components/DashboardClientComponents";
 
 export default async function Home() {
   const data = await fetcher("/dashboard");
