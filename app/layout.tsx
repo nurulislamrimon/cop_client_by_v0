@@ -21,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <TopLoader />
         <AuthProvider>
           <ThemeProvider
             attribute="class"
@@ -42,4 +43,5 @@ export default function RootLayout({
 
 import "./globals.css"; import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
+import TopLoader from "@/components/TopLoader";
 
