@@ -14,9 +14,9 @@ const financeLinks = [
   { name: "Withdraw", path: "/finance/withdraw" },
   { name: "Profit", path: "/finance/profit" },
   { name: "Loss", path: "/finance/loss" },
-  { name: "Investment", path: "/finance/investment" },
   { name: "Expense", path: "/finance/expense" },
   { name: "Balance", path: "/finance/balance" },
+  { name: "Investment", path: "/finance/investment" },
 ]
 
 export default function FinanceLayout({
