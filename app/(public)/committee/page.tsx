@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react"
 import CommitteeClientComps from "./__components/CommitteeClientComps"
 import { fetcher } from "@/server_actions/fetcher"
 import { ISearchParams } from "@/interfaces/meta"
-import { revalidationTime } from "@/config/constants/common"
+import { revalidationTime } from "@/config/constants/common.constants"
 
 export default async function CommitteePage({ searchParams }: { searchParams: Promise<ISearchParams> }) {
 

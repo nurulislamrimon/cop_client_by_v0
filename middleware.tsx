@@ -3,22 +3,25 @@ import { NextRequest, NextResponse } from "next/server"
 // import { verifyAuthToken } from "./lib/auth" // Custom helper you’ll write
 
 // Define protected routes and roles (if needed)
-const protectedRoutes = ["/dashboard", "/admin"]
+const protectedRoutes = ["/finance"]
 const adminRoutes = ["/admin"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
-  const token = req.cookies.get("token")?.value
+  const token = req.cookies.get("accessToken")?.value
+
+  const protectedRoutes = ["/dashboard", "/committee", "/members"]
+  const adminRoutes = ["/admin"]
 
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
-  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route))
 
-  // If route is protected but no token
   if (isProtected && !token) {
-    return NextResponse.redirect(new URL("/login", req.url))
+    const loginUrl = new URL("/login", req.url)
+    loginUrl.searchParams.set("redirect", pathname)
+
+    return NextResponse.redirect(loginUrl)
   }
 
-  // If token exists, verify it
   if (token) {
     try {
       // const user = await verifyAuthToken(token)
@@ -45,5 +48,5 @@ export async function middleware(req: NextRequest) {
 
 // Apply only to specific routes
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*"], // or ["/((?!api|_next/static|favicon.ico).*)"]
+  matcher: ["/((?!api|_next/static|favicon.ico).*)"] // or  ["/dashboard/:path*", "/admin/:path*"],
 }

@@ -32,9 +32,11 @@ export default function RootLayout({
             <main className="flex-1 p-4 md:p-8">{children}</main>
           </div>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
 }
 
-import "./globals.css";
+import "./globals.css"; import { Toaster } from "sonner";
+

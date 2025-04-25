@@ -1,6 +1,6 @@
 import { fetcher } from "@/server_actions/fetcher";
 import EachMemberClientComp from "./__components/EachMemberClientComp";
-import { revalidationTime } from "@/config/constants/common";
+import { revalidationTime } from "@/config/constants/common.constants";
 
 interface MemberPreviewPageProps {
   params: {
