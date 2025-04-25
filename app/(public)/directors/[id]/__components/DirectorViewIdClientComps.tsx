@@ -3,7 +3,7 @@
 
 import PreviewCard from "@/components/preview-card"
 
-export default function CommitteeViewIdClientComps({ committee }: { committee?: Record<string, any> }) {
+export default function DirectorViewIdClientComps({ committee }: { committee?: Record<string, any> }) {
     let committeeData: Record<string, string> = {}
     let profile_photo = ''
     if (committee) {
