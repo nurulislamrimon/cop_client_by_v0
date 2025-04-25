@@ -11,9 +11,6 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
     const [yearlyStats, setYearlyStats] = useState<any>(null);
     const [monthlyStats, setMonthlyStats] = useState<any>(null);
 
-    console.log(yearlyStats);
-    console.log(monthlyStats);
-
     useEffect(() => {
         const fetchStats = async () => {
             const yearly = await fetcher("/dashboard/last-year-statistics", {
