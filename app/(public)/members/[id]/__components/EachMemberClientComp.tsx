@@ -18,7 +18,7 @@ export default function EachMemberClientComp({ member }: { member?: Record<strin
             title={memberData.full_name as string}
             data={memberData}
             backLink="/members"
-            imageSrc={`/placeholder.svg?height=128&width=128&text=${(memberData.name as string)
+            imageSrc={profile_photo || `/placeholder.svg?height=128&width=128&text=${(memberData.name as string)
                 ?.split(" ")
                 ?.map((n) => n[0])
                 ?.join("")}`}
