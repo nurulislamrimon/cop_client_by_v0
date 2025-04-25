@@ -63,10 +63,10 @@ export default function PreviewCard({ title, data, backLink, imageSrc, badges = 
             )}
             <div className="flex-1 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(data).map(([key, value]) => (
+                {Object.entries(data)?.map(([key, value]) => (
                   <div key={key} className="space-y-1">
                     <p className="text-sm font-medium text-muted-foreground">
-                      {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1")}
+                      {key?.charAt(0)?.toUpperCase() + key?.slice(1)?.replace(/([A-Z])/g, " $1")}
                     </p>
                     <p className="font-medium">{value || "-"}</p>
                   </div>
