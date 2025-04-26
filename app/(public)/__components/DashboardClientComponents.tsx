@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
+import { currency } from "@/constants/common.constants";
 
 const DashboardClientComponents = ({
   data,
@@ -182,44 +183,73 @@ const DashboardClientComponents = ({
         ))}
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={cardsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-        className="rounded-lg border bg-card p-6"
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        animate={cardsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="relative rounded-2xl bg-white/10 border border-white/20 backdrop-blur-2xl shadow-2xl p-12 overflow-hidden min-h-[460px] flex items-center justify-center"
       >
-        <h2 className="text-2xl font-bold mb-4">Financial Overview</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {[
-            { title: "Deposits", value: "$345,200", path: "/finance/deposit" },
-            {
-              title: "Withdrawals",
-              value: "$124,800",
-              path: "/finance/withdraw",
-            },
-            { title: "Profit", value: "$78,500", path: "/finance/profit" },
-            { title: "Balance", value: "$1,245,600", path: "/finance/balance" },
-          ].map((item, index) => (
-            <Link key={item.title} href={item.path}>
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {item.title}
-                  </p>
-                  <p className="text-2xl font-bold">{item.value}</p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-        <div className="mt-4">
-          <Button asChild variant="outline" size="sm">
+        {/* Floating Action Button */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <Button
+            asChild
+            variant="default"
+            size="lg"
+            className="flex items-center gap-2 px-6 py-4 text-lg font-semibold shadow-xl backdrop-blur-md bg-primary/90 hover:bg-primary transition"
+          >
             <Link href="/finance">
-              View All Financial Data <ArrowRight className="ml-2 h-4 w-4" />
+              View All Financial Data
+              <ArrowRight className="h-5 w-5" />
             </Link>
           </Button>
         </div>
-      </motion.div>
+
+        {/* Hidden Blurred Content */}
+        <div className="pointer-events-none blur-md select-none w-full">
+          <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-10 tracking-tight">
+            Financial Overview –{" "}
+            <span className="text-primary">Combination of Power</span>
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+            {[
+              {
+                title: "Deposits",
+                value: "345,200" + currency,
+                subtitle: "All incoming transactions",
+              },
+              {
+                title: "Withdrawals",
+                value: "124,800" + currency,
+                subtitle: "All outgoing funds",
+              },
+              {
+                title: "Net Profit",
+                value: "78,500" + currency,
+                subtitle: "Profit after expenses",
+              },
+              {
+                title: "Current Balance",
+                value: "1,245,600" + currency,
+                subtitle: "Total available now",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl bg-white/50 border border-gray-300 p-6 shadow text-center"
+              >
+                <p className="text-sm font-medium text-gray-600 mb-1 uppercase tracking-wide">
+                  {item.title}
+                </p>
+                <p className="text-2xl font-bold text-gray-800 mb-1">
+                  {item.value}
+                </p>
+                <p className="text-xs text-gray-500">{item.subtitle}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
     </>
   );
 };
