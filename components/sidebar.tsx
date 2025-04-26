@@ -46,8 +46,7 @@ export default function Sidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const { isLoggedIn, setIsLoggedIn } = useAuth()
-
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   useEffect(() => {
     setIsMounted(true);
@@ -232,19 +231,16 @@ export default function Sidebar() {
               </p>
               {isLoggedIn && (
                 <Button
-                  variant="destructive"
-                  className="w-full"
+                  className="w-full h-6"
                   onClick={async () => {
-                    await logoutAction()
-                    setIsLoggedIn(null)
+                    await logoutAction();
+                    setIsLoggedIn(null);
                   }}
                 >
                   Logout
                 </Button>
               )}
             </div>
-
-
           </motion.aside>
         )}
       </AnimatePresence>
