@@ -11,6 +11,7 @@ import { Plus, Search } from "lucide-react"
 import PageTransition from "@/components/page-transition"
 import { fetcher } from "@/server_actions/fetcher"
 import { currency } from "@/constants/common.constants"
+import Link from "next/link"
 
 type Deposit = {
   id: number
@@ -68,10 +69,12 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold tracking-tight">Deposits</h1>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            New Deposit
-          </Button>
+          <Link href="/add/transaction">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              New Deposit
+            </Button>
+          </Link>
         </div>
 
         <Tabs defaultValue="all" className="w-full">
