@@ -5,48 +5,50 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
 import { fetcher } from "@/server_actions/fetcher";
 import { toast } from "sonner";
-import { financeRoutes } from "@/constants/common.constants";
+import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 
-const transactionTypes = ["Deposit", "Withdraw", "Profit", "Lose", "Expense", "Investment"];
-
-interface Member {
-    id: number;
-    full_name: string;
-}
-
-export default function AddTransactionForm({ accessToken }: { accessToken?: string }) {
+export default function AddTransactionPage() {
     const router = useRouter();
+    const [members, setMembers] = useState<{ id: number; full_name: string }[]>([]);
+    const [memberSearch, setMemberSearch] = useState("");
+    const [memberLoading, setMemberLoading] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [members, setMembers] = useState<Member[]>([]);
+
     const [formData, setFormData] = useState({
+        member_id: "",
         trx_type: "Deposit",
         amount: "",
         note: "",
-        member_id: "",
-        collector_id: "",
-        approver_id: "",
-        collected_at: new Date().toISOString().slice(0, 10), // today's date
     });
 
     useEffect(() => {
         async function fetchMembers() {
-            const result = await fetcher("/member")
-            if (result.success && Array.isArray(result?.data)) {
-                setMembers(result?.data)
-            } else {
-                const errorMessages = result?.errorMessages;
-                if (Array.isArray(errorMessages)) {
-                    errorMessages?.forEach(e => toast.error(e.message))
+            setMemberLoading(true);
+            try {
+                const result = await fetcher("/member?searchTerm=" + memberSearch);
+                if (result.success && Array.isArray(result?.data)) {
+                    setMembers(result.data);
                 } else {
-                    toast.error("Failed to fetch members!")
+                    const errorMessages = result?.errorMessages;
+                    if (Array.isArray(errorMessages)) {
+                        errorMessages.forEach((e) => toast.error(e.message));
+                    } else {
+                        toast.error("Failed to fetch members!");
+                    }
                 }
+            } catch (error) {
+                console.error(error);
+                toast.error("Failed to fetch members!");
+            } finally {
+                setMemberLoading(false);
             }
         }
+
         fetchMembers();
-    }, []);
+    }, [memberSearch]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -60,16 +62,13 @@ export default function AddTransactionForm({ accessToken }: { accessToken?: stri
         try {
             const result = await fetcher("/transaction/add", {
                 method: "POST",
-                authToken: accessToken,
                 body: {
-                    ...formData,
-                    amount: parseInt(formData.amount),
-                    member_id: parseInt(formData.member_id),
-                    collector_id: formData.collector_id ? parseInt(formData.collector_id) : undefined,
-                    approver_id: formData.approver_id ? parseInt(formData.approver_id) : undefined,
-                    collected_at: new Date(formData.collected_at),
+                    member_id: Number(formData.member_id),
+                    trx_type: formData.trx_type,
+                    amount: Number(formData.amount),
+                    note: formData.note,
                 },
-                revalidatePaths: ["/", "/finance", ...financeRoutes.map(r => "/finance" + r)],
+                revalidatePaths: ["/", "/transactions"],
             });
 
             if (!result?.success) {
@@ -77,16 +76,16 @@ export default function AddTransactionForm({ accessToken }: { accessToken?: stri
                 if (Array.isArray(errorMessages)) {
                     errorMessages.forEach((e) => toast.error(e.message));
                 } else {
-                    toast.error("Failed to add transaction!");
+                    toast.error("Failed to create transaction!");
                 }
                 return;
             }
 
             toast.success("Transaction added successfully!");
-            router.push("/finance");
-        } catch (err) {
-            console.error(err);
-            toast.error("Something went wrong.");
+            router.push("/transactions");
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
         } finally {
             setLoading(false);
         }
@@ -109,39 +108,17 @@ export default function AddTransactionForm({ accessToken }: { accessToken?: stri
                                 Add New Transaction
                             </h1>
 
+                            {/* Search input */}
                             <div className="col-span-full">
-                                <label className="block mb-1 text-sm font-medium">Transaction Type</label>
-                                <select
-                                    name="trx_type"
-                                    value={formData.trx_type}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border rounded-md"
-                                    required
-                                >
-                                    {transactionTypes.map((type) => (
-                                        <option key={type} value={type}>
-                                            {type}
-                                        </option>
-                                    ))}
-                                </select>
+                                <label className="block mb-1 text-sm font-medium">Search Member</label>
+                                <Input
+                                    placeholder="Type to search..."
+                                    value={memberSearch}
+                                    onChange={(e) => setMemberSearch(e.target.value)}
+                                />
                             </div>
 
-                            <Input
-                                name="amount"
-                                label="Amount"
-                                type="number"
-                                value={formData.amount}
-                                onChange={handleChange}
-                                required
-                            />
-
-                            <Input
-                                name="note"
-                                label="Note (optional)"
-                                value={formData.note}
-                                onChange={handleChange}
-                            />
-
+                            {/* Member select */}
                             <div className="col-span-full">
                                 <label className="block mb-1 text-sm font-medium">Member</label>
                                 <select
@@ -150,64 +127,77 @@ export default function AddTransactionForm({ accessToken }: { accessToken?: stri
                                     onChange={handleChange}
                                     className="w-full p-2 border rounded-md"
                                     required
+                                    disabled={memberLoading}
                                 >
-                                    <option value="">-- Select Member --</option>
-                                    {members.map((member) => (
-                                        <option key={member.id} value={member.id}>
-                                            {member.full_name}
-                                        </option>
-                                    ))}
+                                    {memberLoading ? (
+                                        <option>Loading...</option>
+                                    ) : (
+                                        <>
+                                            <option value="">-- Select Member --</option>
+                                            {members.map((member) => (
+                                                <option key={member.id} value={member.id}>
+                                                    {member.full_name}
+                                                </option>
+                                            ))}
+                                        </>
+                                    )}
                                 </select>
                             </div>
 
-                            <div className="col-span-full">
-                                <label className="block mb-1 text-sm font-medium">Collector (optional)</label>
+                            {/* Transaction Type */}
+                            <div>
+                                <label className="block mb-1 text-sm font-medium">Transaction Type</label>
                                 <select
-                                    name="collector_id"
-                                    value={formData.collector_id}
+                                    name="trx_type"
+                                    value={formData.trx_type}
                                     onChange={handleChange}
                                     className="w-full p-2 border rounded-md"
+                                    required
                                 >
-                                    <option value="">-- Select Collector --</option>
-                                    {members.map((member) => (
-                                        <option key={member.id} value={member.id}>
-                                            {member.full_name}
-                                        </option>
-                                    ))}
+                                    <option value="Deposit">Deposit</option>
+                                    <option value="Withdraw">Withdraw</option>
+                                    <option value="Profit">Profit</option>
+                                    <option value="Lose">Lose</option>
+                                    <option value="Expense">Expense</option>
+                                    <option value="Investment">Investment</option>
                                 </select>
                             </div>
 
-                            <div className="col-span-full">
-                                <label className="block mb-1 text-sm font-medium">Approver (optional)</label>
-                                <select
-                                    name="approver_id"
-                                    value={formData.approver_id}
+                            {/* Amount */}
+                            <div>
+                                <Input
+                                    name="amount"
+                                    type="number"
+                                    label="Amount"
+                                    placeholder="Enter amount"
+                                    value={formData.amount}
                                     onChange={handleChange}
-                                    className="w-full p-2 border rounded-md"
-                                >
-                                    <option value="">-- Select Approver --</option>
-                                    {members.map((member) => (
-                                        <option key={member.id} value={member.id}>
-                                            {member.full_name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    required
+                                />
                             </div>
 
-                            <Input
-                                name="collected_at"
-                                label="Collected At"
-                                type="date"
-                                value={formData.collected_at}
-                                onChange={handleChange}
-                            />
+                            {/* Note */}
+                            <div className="col-span-full">
+                                <Input
+                                    name="note"
+                                    label="Note (optional)"
+                                    placeholder="Any note..."
+                                    value={formData.note}
+                                    onChange={handleChange}
+                                />
+                            </div>
 
+                            {/* Submit Button */}
                             <Button
                                 type="submit"
                                 className="col-span-full"
                                 disabled={loading}
                             >
-                                {loading ? "Saving..." : "Add Transaction"}
+                                {loading ? (
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                ) : (
+                                    "Save Transaction"
+                                )}
                             </Button>
                         </form>
                     </CardContent>
