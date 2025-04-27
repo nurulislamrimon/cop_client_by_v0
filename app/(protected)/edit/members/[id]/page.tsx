@@ -1,4 +1,4 @@
-import { revalidationTimeLong } from '@/constants/common.constants';
+import { mainRoutes, revalidationTimeLong } from '@/constants/common.constants';
 import { fetcher } from '@/server_actions/fetcher';
 import EditMemberForm from './__components/EditMemberForm';
 import { cookies } from 'next/headers';
@@ -9,7 +9,7 @@ export default async function EditMemberPage({ params }: { params: Promise<{ id:
     const param = await params;
     const id = param.id;
 
-    const memberData = await fetcher(`/member/${id}`, { authToken: accessToken });
+    const memberData = await fetcher(`/member/${id}`, { authToken: accessToken, revalidatePaths: [...mainRoutes] });
 
     return <EditMemberForm member={memberData?.data} accessToken={accessToken} />
 }
