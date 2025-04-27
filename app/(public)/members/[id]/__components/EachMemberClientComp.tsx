@@ -22,6 +22,7 @@ export default function EachMemberClientComp({
       data={memberData}
       backLink="/members"
       editPage={"/edit/members/" + memberData?.id}
+      deleteUrl={"/member/" + memberData?.id}
       imageSrc={
         profile_photo ||
         `/placeholder.svg?height=128&width=128&text=${(

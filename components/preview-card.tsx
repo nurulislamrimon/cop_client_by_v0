@@ -20,17 +20,18 @@ interface PreviewCardProps {
   data: Record<string, any>;
   backLink: string;
   editPage: string;
+  deleteUrl: string;
   imageSrc?: string;
   badges?: string[];
 }
 
-export default function PreviewCard({ title, data, backLink, editPage, imageSrc, badges = [] }: PreviewCardProps) {
+export default function PreviewCard({ title, data, backLink, editPage, deleteUrl, imageSrc, badges = [] }: PreviewCardProps) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const router = useRouter()
 
   const handleDelete = async () => {
     const result = await deleteItem({
-      url: "/member/" + data?.id,
+      url: deleteUrl,
       revalidatePaths: [...mainRoutes],
     });
     if (result.success) {

@@ -23,6 +23,7 @@ export default function CommitteeViewIdClientComps({ committee }: { committee?: 
             data={committeeData}
             backLink="/committee"
             editPage={"/edit/committee/" + committee?.id}
+            deleteUrl={"/committee/" + committee?.id}
             imageSrc={profile_photo || `/placeholder.svg?height=128&width=128&text=${committeeData.full_name
                 ?.split(" ")
                 ?.map((n: any) => n[0])
