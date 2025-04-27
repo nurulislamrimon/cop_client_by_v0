@@ -11,7 +11,7 @@ import { fetcher } from "@/server_actions/fetcher";
 
 interface AddCommitteeFormProps {
     accessToken?: string;
-    members: { id: number; full_name: string }[];
+    members?: { id: number; full_name: string }[];
 }
 
 const committeeTypes = ["executive", "director"];
@@ -120,7 +120,7 @@ export default function AddCommitteeForm({ accessToken, members }: AddCommitteeF
                                     className="w-full p-2 border rounded-md"
                                 >
                                     <option value="">-- None --</option>
-                                    {members.map((member) => (
+                                    {members?.map((member) => (
                                         <option key={member.id} value={member.id}>
                                             {member.full_name}
                                         </option>
