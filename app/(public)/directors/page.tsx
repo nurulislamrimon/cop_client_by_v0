@@ -5,6 +5,7 @@ import { ISearchParams } from "@/interfaces/meta"
 import { fetcher } from "@/server_actions/fetcher";
 import DirectorsClientComps from "./__components/DirectorsClientComps";
 import { revalidationTime } from "@/constants/common.constants";
+import Link from "next/link";
 
 export default async function DirectorsPage({ searchParams }: { searchParams: Promise<ISearchParams> }) {
 
@@ -20,10 +21,13 @@ export default async function DirectorsPage({ searchParams }: { searchParams: Pr
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold tracking-tight">Directors</h1>
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Director
-          </Button>
+
+          <Link href="/add/committee">
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add Director
+            </Button>
+          </Link>
         </div>
         <DirectorsClientComps directors={committeeData?.data} />
       </div>
