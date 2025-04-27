@@ -9,7 +9,7 @@ export default async function EditMemberPage({ params }: { params: Promise<{ id:
     const param = await params;
     const id = param.id;
 
-    const memberData = await fetcher(`/member/${id}`, { authToken: accessToken, revalidatePaths: [...mainRoutes] });
+    const memberData = await fetcher(`/member/${id}`, { authToken: accessToken });
 
     return <EditMemberForm member={memberData?.data} accessToken={accessToken} />
 }

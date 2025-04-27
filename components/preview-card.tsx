@@ -19,11 +19,12 @@ interface PreviewCardProps {
   title: string;
   data: Record<string, any>;
   backLink: string;
+  editPage: string;
   imageSrc?: string;
   badges?: string[];
 }
 
-export default function PreviewCard({ title, data, backLink, imageSrc, badges = [] }: PreviewCardProps) {
+export default function PreviewCard({ title, data, backLink, editPage, imageSrc, badges = [] }: PreviewCardProps) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const router = useRouter()
 
@@ -112,7 +113,7 @@ export default function PreviewCard({ title, data, backLink, imageSrc, badges = 
           </CardContent>
           <CardFooter className="border-t bg-muted/50 px-6 py-4">
             <div className="flex justify-end gap-2">
-              <Link href={"/edit/members/" + data?.id}>
+              <Link href={editPage}>
                 <Button variant="outline">Edit</Button>
               </Link>
               <Button>

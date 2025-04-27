@@ -21,6 +21,7 @@ export default function EachMemberClientComp({
       title={memberData.full_name as string}
       data={memberData}
       backLink="/members"
+      editPage={"/edit/members/" + memberData?.id}
       imageSrc={
         profile_photo ||
         `/placeholder.svg?height=128&width=128&text=${(
@@ -33,7 +34,7 @@ export default function EachMemberClientComp({
       badges={[
         `${memberData.shares || 0} Shares`,
         (memberData?.account_status as string)?.charAt(0).toUpperCase() +
-          (memberData?.account_status as string)?.slice(1),
+        (memberData?.account_status as string)?.slice(1),
       ]}
     />
   );

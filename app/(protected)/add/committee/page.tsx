@@ -7,7 +7,7 @@ export default async function EditMemberPage() {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("accessToken")?.value;
 
-    const memberData = await fetcher(`/member?sortOrder=asc`, { authToken: accessToken, revalidatePaths: [...mainRoutes] });
+    const memberData = await fetcher(`/member?sortOrder=asc&limit=100`, { authToken: accessToken, revalidatePaths: [...mainRoutes] });
 
     return <AddCommitteeForm members={memberData?.data} accessToken={accessToken} />
 }
