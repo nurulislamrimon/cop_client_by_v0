@@ -77,8 +77,10 @@ export default function PreviewCard({ title, data, backLink, imageSrc, badges = 
         </CardContent>
         <CardFooter className="border-t bg-muted/50 px-6 py-4">
           <div className="flex justify-end gap-2">
-            <Button variant="outline">Edit</Button>
-            <Button>Contact</Button>
+            <Link href={"/edit/members/" + data?.id}>
+              <Button variant="outline">Edit</Button>
+            </Link>
+            <Button><a href={"tel:" + data?.phone_number}>Contact</a></Button>
           </div>
         </CardFooter>
       </Card>
