@@ -105,8 +105,8 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="recent">Recent</SelectItem>
-                        <SelectItem value="amountasc">Amount (A-Z)</SelectItem>
-                        <SelectItem value="amountdesc">Amount (Z-A)</SelectItem>
+                        <SelectItem value="amountasc">Amount (Low-High)</SelectItem>
+                        <SelectItem value="amountdesc">Amount (High-Low)</SelectItem>
                       </SelectContent>
                     </Select>
 

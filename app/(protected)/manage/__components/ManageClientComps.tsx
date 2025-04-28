@@ -13,7 +13,8 @@ import { fetcher } from "@/server_actions/fetcher"
 import { currency } from "@/constants/common.constants"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-type Deposit = {
+
+type Transaction = {
   id: number
   amount: number
   collected_at: string
@@ -26,22 +27,24 @@ type Deposit = {
 export default function ManageClientComps({ accessToken }: { accessToken?: string }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [sortType, setSortType] = useState("recent")
-  const [transactions, setDeposits] = useState<Deposit[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
+  const [trxType, setTrxType] = useState("")
+  const [memberId, setMemberId] = useState("")
   const router = useRouter()
 
   useEffect(() => {
-    const getDeposits = async () => {
+    const getTransactions = async () => {
       setLoading(true)
 
-      let query = `/transaction/by-admin`
+      let query = `/transaction/by-admin?`
 
       if (sortType === "amountasc") {
-        query += "&sortBy=amount&&sortOrder=asc"
+        query += "&sortBy=amount&sortOrder=asc"
       } else if (sortType === "amountdesc") {
-        query += "&sortBy=amount&&sortOrder=desc"
+        query += "&sortBy=amount&sortOrder=desc"
       }
 
       if (searchQuery) {
@@ -56,24 +59,32 @@ export default function ManageClientComps({ accessToken }: { accessToken?: strin
         query += "&collected_at[lt]=" + endDate
       }
 
+      if (trxType && trxType !== "all") {
+        query += "&trx_type=" + trxType
+      }
+
+      if (memberId) {
+        query += "&member_id=" + memberId
+      }
+
       const data = await fetcher(query, { authToken: accessToken })
 
-      setDeposits(data?.data || [])
+      setTransactions(data?.data || [])
       setLoading(false)
     }
 
-    getDeposits()
-  }, [accessToken, sortType, searchQuery, startDate, endDate])
+    getTransactions()
+  }, [accessToken, sortType, searchQuery, startDate, endDate, trxType, memberId])
 
   return (
     <PageTransition>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tight">Deposits</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Transactions</h1>
           <Link href="/add/transaction">
             <Button>
               <Plus className="mr-2 h-4 w-4" />
-              New Deposit
+              New Transaction
             </Button>
           </Link>
         </div>
@@ -82,12 +93,14 @@ export default function ManageClientComps({ accessToken }: { accessToken?: strin
           <TabsContent value="all" className="mt-4 space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Deposit History</CardTitle>
+                <CardTitle>Transaction History</CardTitle>
                 <CardDescription>View all transactions made by members</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
+                  {/* Filters */}
                   <div className="flex items-center gap-4 flex-wrap">
+                    {/* Search */}
                     <div className="relative flex-1 min-w-[200px]">
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -99,17 +112,44 @@ export default function ManageClientComps({ accessToken }: { accessToken?: strin
                       />
                     </div>
 
+                    {/* Sorting */}
                     <Select value={sortType} onValueChange={setSortType}>
                       <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Sorting" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="recent">Recent</SelectItem>
-                        <SelectItem value="amountasc">Amount (A-Z)</SelectItem>
-                        <SelectItem value="amountdesc">Amount (Z-A)</SelectItem>
+                        <SelectItem value="amountasc">Amount (Low-High)</SelectItem>
+                        <SelectItem value="amountdesc">Amount (High-Low)</SelectItem>
                       </SelectContent>
                     </Select>
 
+                    {/* Transaction Type Filter */}
+                    <Select value={trxType} onValueChange={setTrxType}>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Filter by Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Types</SelectItem> {/* <== NOT empty string */}
+                        <SelectItem value="Deposit">Deposit</SelectItem>
+                        <SelectItem value="Withdraw">Withdraw</SelectItem>
+                        <SelectItem value="Profit">Profit</SelectItem>
+                        <SelectItem value="Loss">Loss</SelectItem>
+                        <SelectItem value="Expense">Expense</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+
+                    {/* Member ID filter */}
+                    <Input
+                      type="number"
+                      placeholder="Member ID"
+                      className="w-[150px]"
+                      value={memberId}
+                      onChange={(e) => setMemberId(e.target.value)}
+                    />
+
+                    {/* Date Range */}
                     <div className="flex gap-2 items-center">
                       <Input
                         type="date"
@@ -127,6 +167,7 @@ export default function ManageClientComps({ accessToken }: { accessToken?: strin
                     </div>
                   </div>
 
+                  {/* Table */}
                   <div className="rounded-md border">
                     <Table>
                       <TableHeader>
@@ -137,12 +178,13 @@ export default function ManageClientComps({ accessToken }: { accessToken?: strin
                           <TableHead>Trx Type</TableHead>
                           <TableHead>Amount</TableHead>
                           <TableHead>Note</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {loading ? (
                           <TableRow>
-                            <TableCell colSpan={5} className="h-24 text-center">
+                            <TableCell colSpan={7} className="h-24 text-center">
                               Loading transactions...
                             </TableCell>
                           </TableRow>
@@ -166,12 +208,13 @@ export default function ManageClientComps({ accessToken }: { accessToken?: strin
                                 >
                                   Edit
                                 </Button>
+                                {/* You can add Delete button here too */}
                               </TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
-                            <TableCell colSpan={5} className="h-24 text-center">
+                            <TableCell colSpan={7} className="h-24 text-center">
                               No transactions found.
                             </TableCell>
                           </TableRow>
