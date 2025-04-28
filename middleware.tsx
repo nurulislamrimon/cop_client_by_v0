@@ -30,7 +30,9 @@ export async function middleware(req: NextRequest) {
       }
 
       if (isProtected) {
-        hasPermission(user, ["manage:*"])
+        if (!hasPermission(user, ["manage:*"])) {
+          return NextResponse.redirect(new URL("/unauthorized", req.url))
+        }
       }
 
       const requestHeaders = new Headers(req.headers)
