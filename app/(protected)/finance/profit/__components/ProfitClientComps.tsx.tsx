@@ -12,6 +12,7 @@ import PageTransition from "@/components/page-transition"
 import { fetcher } from "@/server_actions/fetcher"
 import { currency } from "@/constants/common.constants"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 type Profit = {
   id: number
@@ -30,6 +31,7 @@ export default function ProfitClientComps({ accessToken }: { accessToken?: strin
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
+  const router = useRouter()
 
   useEffect(() => {
     const getProfits = async () => {
@@ -145,17 +147,29 @@ export default function ProfitClientComps({ accessToken }: { accessToken?: strin
                           </TableRow>
                         ) : profits.length > 0 ? (
                           profits.map((profit) => (
-                            <TableRow key={profit.id}>
+                            <TableRow
+                              key={profit.id}
+                              className="group relative"
+                            >
                               <TableCell>{new Date(profit.collected_at).toDateString()}</TableCell>
                               <TableCell>{profit?.member?.full_name}</TableCell>
-                              <TableCell className="font-medium">${(profit.amount.toFixed(2)) + currency}</TableCell>
+                              <TableCell className="font-medium">{(profit.amount.toFixed(2)) + currency}</TableCell>
                               <TableCell>{profit.note || "-"}</TableCell>
+                              <TableCell className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => router.push(`/edit/transaction/${profit.id}`)}
+                                >
+                                  Edit
+                                </Button>
+                              </TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center">
-                              No profits found.
+                              No expenses found.
                             </TableCell>
                           </TableRow>
                         )}
