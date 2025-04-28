@@ -12,7 +12,7 @@ import PageTransition from "@/components/page-transition"
 import { fetcher } from "@/server_actions/fetcher"
 import { currency } from "@/constants/common.constants"
 import Link from "next/link"
-
+import { useRouter } from "next/navigation"
 type Deposit = {
   id: number
   amount: number
@@ -30,6 +30,7 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
+  const router = useRouter()
 
   useEffect(() => {
     const getDeposits = async () => {
@@ -145,11 +146,23 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                           </TableRow>
                         ) : deposits.length > 0 ? (
                           deposits.map((deposit) => (
-                            <TableRow key={deposit.id}>
+                            <TableRow
+                              key={deposit.id}
+                              className="group relative"
+                            >
                               <TableCell>{new Date(deposit.collected_at).toDateString()}</TableCell>
                               <TableCell>{deposit?.member?.full_name}</TableCell>
                               <TableCell className="font-medium">{(deposit.amount.toFixed(2)) + currency}</TableCell>
                               <TableCell>{deposit.note || "-"}</TableCell>
+                              <TableCell className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => router.push(`/edit/transaction/${deposit.id}`)}
+                                >
+                                  Edit
+                                </Button>
+                              </TableCell>
                             </TableRow>
                           ))
                         ) : (

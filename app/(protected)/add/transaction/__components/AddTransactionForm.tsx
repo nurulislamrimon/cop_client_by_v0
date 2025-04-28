@@ -9,9 +9,8 @@ import { fetcher } from "@/server_actions/fetcher";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
-import { financeRoutes } from "@/constants/common.constants";
 
-export default function AddTransactionPage() {
+export default function AddTransactionPage({ accessToken }: { accessToken?: string }) {
     const router = useRouter();
     const [members, setMembers] = useState<{ id: number; full_name: string }[]>([]);
     const [memberSearch, setMemberSearch] = useState("");
@@ -29,7 +28,7 @@ export default function AddTransactionPage() {
         async function fetchMembers() {
             setMemberLoading(true);
             try {
-                const result = await fetcher("/member?searchTerm=" + memberSearch);
+                const result = await fetcher("/member?sortOrder=asc&searchTerm=" + memberSearch);
                 if (result.success && Array.isArray(result?.data)) {
                     setMembers(result.data);
                 } else {
@@ -63,13 +62,14 @@ export default function AddTransactionPage() {
         try {
             const result = await fetcher("/transaction/add", {
                 method: "POST",
+                authToken: accessToken,
                 body: {
                     member_id: Number(formData.member_id),
                     trx_type: formData.trx_type,
                     amount: Number(formData.amount),
                     note: formData.note,
                 },
-                revalidatePaths: ["/", "/finance", ...financeRoutes.map(r => "/finance/" + r)],
+                revalidatePaths: ["/", "/finance"],
             });
 
             if (!result?.success) {
@@ -137,7 +137,7 @@ export default function AddTransactionPage() {
                                             <option value="">-- Select Member --</option>
                                             {members.map((member) => (
                                                 <option key={member.id} value={member.id}>
-                                                    {member.full_name}
+                                                    {member?.id} - {member?.full_name}
                                                 </option>
                                             ))}
                                         </>

@@ -82,7 +82,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
                     amount: Number(formData.amount),
                     note: formData.note,
                 },
-                revalidatePaths: ["/", "/finance", ...financeRoutes.map(r => "/finance/" + r)],
+                revalidatePaths: ["/", "/finance"],
             });
 
             if (!result?.success) {
@@ -150,7 +150,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
                                             <option value="">-- Select Member --</option>
                                             {members.map((member) => (
                                                 <option key={member.id} value={member.id}>
-                                                    {member.full_name}
+                                                    {member?.id} - {member?.full_name}
                                                 </option>
                                             ))}
                                         </>

@@ -12,6 +12,7 @@ import PageTransition from "@/components/page-transition"
 import { fetcher } from "@/server_actions/fetcher"
 import { currency } from "@/constants/common.constants"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 type Expense = {
   id: number
@@ -30,6 +31,7 @@ export default function ExpenseClientComps({ accessToken }: { accessToken?: stri
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
+  const router = useRouter()
 
   useEffect(() => {
     const getExpenses = async () => {
@@ -145,11 +147,23 @@ export default function ExpenseClientComps({ accessToken }: { accessToken?: stri
                           </TableRow>
                         ) : expenses.length > 0 ? (
                           expenses.map((expense) => (
-                            <TableRow key={expense.id}>
+                            <TableRow
+                              key={expense.id}
+                              className="group relative"
+                            >
                               <TableCell>{new Date(expense.collected_at).toDateString()}</TableCell>
                               <TableCell>{expense?.member?.full_name}</TableCell>
-                              <TableCell className="font-medium">${(expense.amount.toFixed(2)) + currency}</TableCell>
+                              <TableCell className="font-medium">{(expense.amount.toFixed(2)) + currency}</TableCell>
                               <TableCell>{expense.note || "-"}</TableCell>
+                              <TableCell className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => router.push(`/edit/transaction/${expense.id}`)}
+                                >
+                                  Edit
+                                </Button>
+                              </TableCell>
                             </TableRow>
                           ))
                         ) : (
