@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
+import { hasPermission } from "./utils/hasPermission"
 
 // Define protected routes and roles (if needed)
 const protectedRoutes = ["/finance", "/add"]
+const adminRoutes = ["/manage"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const userData = req.cookies.get("user")?.value
 
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
+  const isAdmin = adminRoutes.some((route) => pathname.startsWith(route))
 
   if (isProtected && !userData) {
     const loginUrl = new URL("/login", req.url)
@@ -25,7 +28,10 @@ export async function middleware(req: NextRequest) {
       if (user && user?.role === "super_admin") {
         return NextResponse.next()
       }
-      // return NextResponse.redirect(new URL("/unauthorized", req.url))
+
+      if (isProtected) {
+        hasPermission(user, ["manage:*"])
+      }
 
       const requestHeaders = new Headers(req.headers)
       requestHeaders.set("x-user-id", user.id)
