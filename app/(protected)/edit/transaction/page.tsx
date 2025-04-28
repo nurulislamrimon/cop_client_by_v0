@@ -1,6 +1,6 @@
 import { fetcher } from '@/server_actions/fetcher';
-import EditMemberForm from './__components/EditMemberForm';
 import { cookies } from 'next/headers';
+import EditTransactionForm from './__components/EditTransactionForm';
 
 export default async function EditMemberPage({ params }: { params: Promise<{ id: string }> }) {
     const cookieStore = await cookies();
@@ -8,7 +8,7 @@ export default async function EditMemberPage({ params }: { params: Promise<{ id:
     const param = await params;
     const id = param.id;
 
-    const memberData = await fetcher(`/member/${id}`, { authToken: accessToken });
+    const transactionData = await fetcher(`/transaction/${id}`, { authToken: accessToken });
 
-    return <EditMemberForm member={memberData?.data} accessToken={accessToken} />
+    return <EditTransactionForm initialData={transactionData?.data} accessToken={accessToken} />
 }

@@ -11,7 +11,18 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { financeRoutes } from "@/constants/common.constants";
 
-export default function AddTransactionPage() {
+interface UpdateTransactionFormProps {
+    initialData?: {
+        id: number;
+        member_id: number;
+        trx_type: string;
+        amount: number;
+        note: string;
+    };
+    accessToken?: string
+}
+
+export default function EditTransactionForm({ initialData, accessToken }: UpdateTransactionFormProps) {
     const router = useRouter();
     const [members, setMembers] = useState<{ id: number; full_name: string }[]>([]);
     const [memberSearch, setMemberSearch] = useState("");
@@ -19,10 +30,10 @@ export default function AddTransactionPage() {
     const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
-        member_id: "",
-        trx_type: "Deposit",
-        amount: "",
-        note: "",
+        member_id: String(initialData?.member_id),
+        trx_type: initialData?.trx_type,
+        amount: String(initialData?.amount),
+        note: initialData?.note || "",
     });
 
     useEffect(() => {
@@ -61,9 +72,11 @@ export default function AddTransactionPage() {
         setLoading(true);
 
         try {
-            const result = await fetcher("/transaction/add", {
-                method: "POST",
+            const result = await fetcher("/transaction/" + initialData?.id, {
+                method: "PATCH",
+                authToken: accessToken,
                 body: {
+                    id: initialData?.id,
                     member_id: Number(formData.member_id),
                     trx_type: formData.trx_type,
                     amount: Number(formData.amount),
@@ -77,12 +90,12 @@ export default function AddTransactionPage() {
                 if (Array.isArray(errorMessages)) {
                     errorMessages.forEach((e) => toast.error(e.message));
                 } else {
-                    toast.error("Failed to create transaction!");
+                    toast.error("Failed to update transaction!");
                 }
                 return;
             }
 
-            toast.success("Transaction added successfully!");
+            toast.success("Transaction updated successfully!");
             router.push("/finance");
         } catch (error) {
             console.error(error);
@@ -106,7 +119,7 @@ export default function AddTransactionPage() {
                             onSubmit={handleSubmit}
                         >
                             <h1 className="text-2xl font-bold col-span-full text-center">
-                                Add New Transaction
+                                Update Transaction
                             </h1>
 
                             {/* Search input */}
@@ -197,7 +210,7 @@ export default function AddTransactionPage() {
                                 {loading ? (
                                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                                 ) : (
-                                    "Save Transaction"
+                                    "Update Transaction"
                                 )}
                             </Button>
                         </form>
