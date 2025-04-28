@@ -37,6 +37,7 @@ const menuItems = [
       { name: "Expense", path: "/finance/expense" },
       { name: "Balance", path: "/finance/balance" },
       { name: "Investment", path: "/finance/investment" },
+      { name: "Manage", path: "/manage" },
     ],
   },
 ];
