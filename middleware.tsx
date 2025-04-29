@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { hasPermission } from "./utils/hasPermission"
 
 // Define protected routes and roles (if needed)
-const protectedRoutes = ["/finance", "/add"]
+const protectedRoutes = ["/finance", "/add", "/edit", "/manage"]
 const adminRoutes = ["/manage"]
 
 export async function middleware(req: NextRequest) {
@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
   const userData = req.cookies.get("user")?.value
 
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
-  const isAdmin = adminRoutes.some((route) => pathname.startsWith(route))
+  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route))
 
   if (isProtected && !userData) {
     const loginUrl = new URL("/login", req.url)
@@ -29,7 +29,8 @@ export async function middleware(req: NextRequest) {
         return NextResponse.next()
       }
 
-      if (isProtected) {
+      if (isAdminRoute) {
+        console.log(hasPermission(user, ["manage:*"]))
         if (!hasPermission(user, ["manage:*"])) {
           return NextResponse.redirect(new URL("/unauthorized", req.url))
         }
