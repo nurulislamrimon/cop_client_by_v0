@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,9 @@ export default function AddMemberForm({
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const [lastMemberId, setLastMemberId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
+    id: (lastMemberId || 1) + 1,
     full_name: "",
     father_name: "",
     mother_name: "",
@@ -33,12 +34,36 @@ export default function AddMemberForm({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'id') {
+      setFormData((prev) => ({ ...prev, [name]: Number(value) }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleFileSelect = (selectedFile: File | null) => {
     setFile(selectedFile);
   };
+
+  useEffect(() => {
+    const fetchLastId = async () => {
+      try {
+        const response = await fetcher("/member/last-member-id", {
+          authToken: accessToken,
+        });
+
+        if (response?.data) {
+          const lastId = response.data?.id;
+          setLastMemberId(lastId);
+          setFormData((prev) => ({ ...prev, id: lastId + 1 }));
+        }
+      } catch (err) {
+        toast.error("Failed to fetch last member ID");
+      }
+    };
+
+    fetchLastId();
+  }, [accessToken]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,6 +135,20 @@ export default function AddMemberForm({
               <h1 className="text-2xl font-bold col-span-full text-center">
                 Add New Member
               </h1>
+              {lastMemberId !== null && (
+                <div className="col-span-full text-sm text-gray-600">
+                  Last Member ID: <span className="font-bold">{lastMemberId}</span>
+                </div>
+              )}
+
+              <Input
+                name="id"
+                label="Member ID"
+                type="number"
+                value={formData.id}
+                onChange={handleChange}
+                required
+              />
 
               <Input
                 name="full_name"
