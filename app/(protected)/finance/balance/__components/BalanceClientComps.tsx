@@ -22,12 +22,12 @@ export default function BalanceClientComps({ user = {} }: { user: Record<string,
     } = user
 
     const statCards = [
-        { label: "Total Deposit", amount: transaction_snapshot?.total_deposit_amount },
-        { label: "Total Withdraw", amount: transaction_snapshot?.total_withdraw_amount },
-        { label: "Total Expense", amount: transaction_snapshot?.total_expense_amount },
-        { label: "Total Invest", amount: transaction_snapshot?.total_invest_amount },
-        { label: "Total Profit", amount: transaction_snapshot?.total_profit_amount },
-        { label: "Total Loss", amount: transaction_snapshot?.total_lose_amount },
+        { label: "Total Deposit", amount: transaction_snapshot?.total_deposit_amount || 0 },
+        { label: "Total Withdraw", amount: transaction_snapshot?.total_withdraw_amount || 0 },
+        { label: "Total Expense", amount: transaction_snapshot?.total_expense_amount || 0 },
+        { label: "Total Invest", amount: transaction_snapshot?.total_invest_amount || 0 },
+        { label: "Total Profit", amount: transaction_snapshot?.total_profit_amount || 0 },
+        { label: "Total Loss", amount: transaction_snapshot?.total_lose_amount || 0 },
     ]
 
     return (
