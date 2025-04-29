@@ -37,7 +37,6 @@ const menuItems = [
       { name: "Expense", path: "/finance/expense" },
       { name: "Balance", path: "/finance/balance" },
       { name: "Investment", path: "/finance/investment" },
-      { name: "Manage", path: "/manage" },
     ],
   },
 ];
@@ -49,6 +48,17 @@ export default function Sidebar() {
   const [isMounted, setIsMounted] = useState(false);
   const { isLoggedIn, setIsLoggedIn } = useAuth();
 
+  useEffect(() => {
+    if (isLoggedIn?.role === "super_admin") {
+      menuItems[menuItems.length - 1].submenu?.push(
+        { name: "Manage", path: "/manage" }
+      )
+    } else if (isLoggedIn?.rules?.includes("manage:*")) {
+      menuItems[menuItems.length - 1].submenu?.push(
+        { name: "Manage", path: "/manage" }
+      )
+    }
+  }, [isLoggedIn])
   useEffect(() => {
     setIsMounted(true);
 
