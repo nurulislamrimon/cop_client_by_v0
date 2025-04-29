@@ -49,11 +49,12 @@ export default function Sidebar() {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   useEffect(() => {
+    console.log(isLoggedIn, "------------------")
     if (isLoggedIn?.role === "super_admin") {
       menuItems[menuItems.length - 1].submenu?.push(
         { name: "Manage", path: "/manage" }
       )
-    } else if (isLoggedIn?.rules?.includes("manage:*")) {
+    } else if (isLoggedIn?.access_rule?.rules?.includes("manage:*")) {
       menuItems[menuItems.length - 1].submenu?.push(
         { name: "Manage", path: "/manage" }
       )
@@ -137,9 +138,10 @@ export default function Sidebar() {
             exit="hidden"
             variants={sidebarVariants}
             className={cn(
-              "fixed inset-y-0 left-0 z-40 w-64 bg-background border-r p-4 flex flex-col md:relative",
+              "fixed inset-y-0 left-0 z-40 w-64 bg-background border-r p-4 flex flex-col overflow-y-auto md:relative",
               isMobileMenuOpen ? "block" : "hidden md:block"
             )}
+
           >
             <div className="flex items-center justify-center h-16 mb-8">
               <motion.h1
