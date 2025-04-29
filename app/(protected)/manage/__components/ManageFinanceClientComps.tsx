@@ -83,38 +83,38 @@ export default function StatisticsPage({ accessToken }: { accessToken?: string }
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {data.map((item) => (
               <Card
-                key={item.id}
+                key={item.id || 0}
                 className="shadow-lg hover:shadow-xl transition rounded-2xl p-4"
               >
                 <CardContent className="space-y-2">
                   <div className="text-lg font-semibold">
-                    Member ID: {item.member_id}
+                    Member ID: {item.member_id || 0}
                   </div>
                   <div className="text-sm text-gray-700 font-semibold">
                     💰 Balance:{" "}
                     <span
-                      className={`${item.balance >= 0 ? "text-green-600" : "text-red-600"
+                      className={`${item.balance || 0 >= 0 ? "text-green-600" : "text-red-600"
                         }`}
                     >
-                      {item.balance}
+                      {item.balance || 0}
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                    <div>Total Deposit: <span className="font-bold">{item.total_deposit}</span></div>
-                    <div>Total Withdraw: <span className="font-bold">{item.total_withdraw}</span></div>
-                    <div>Total Expense: <span className="font-bold">{item.total_expense}</span></div>
-                    <div>Total Profit: <span className="font-bold">{item.total_profit}</span></div>
-                    <div>Total Lose: <span className="font-bold">{item.total_lose}</span></div>
-                    <div>Total Invest: <span className="font-bold">{item.total_invest}</span></div>
+                    <div>Total Deposit: <span className="font-bold">{item.total_deposit || 0}</span></div>
+                    <div>Total Withdraw: <span className="font-bold">{item.total_withdraw || 0}</span></div>
+                    <div>Total Expense: <span className="font-bold">{item.total_expense || 0}</span></div>
+                    <div>Total Profit: <span className="font-bold">{item.total_profit || 0}</span></div>
+                    <div>Total Lose: <span className="font-bold">{item.total_lose || 0}</span></div>
+                    <div>Total Invest: <span className="font-bold">{item.total_invest || 0}</span></div>
                   </div>
 
                   <div className="pt-2 border-t mt-2 text-sm text-gray-500 grid grid-cols-2 gap-2">
-                    <div>Deposit Amount: <span className="font-medium">{item.total_deposit_amount}</span></div>
-                    <div>Withdraw Amount: <span className="font-medium">{item.total_withdraw_amount}</span></div>
-                    <div>Expense Amount: <span className="font-medium">{item.total_expense_amount}</span></div>
-                    <div>Profit Amount: <span className="font-medium">{item.total_profit_amount}</span></div>
-                    <div>Lose Amount: <span className="font-medium">{item.total_lose_amount}</span></div>
-                    <div>Invest Amount: <span className="font-medium">{item.total_invest_amount}</span></div>
+                    <div>Deposit Amount: <span className="font-medium">{item.total_deposit_amount || 0}</span></div>
+                    <div>Withdraw Amount: <span className="font-medium">{item.total_withdraw_amount || 0}</span></div>
+                    <div>Expense Amount: <span className="font-medium">{item.total_expense_amount || 0}</span></div>
+                    <div>Profit Amount: <span className="font-medium">{item.total_profit_amount || 0}</span></div>
+                    <div>Lose Amount: <span className="font-medium">{item.total_lose_amount || 0}</span></div>
+                    <div>Invest Amount: <span className="font-medium">{item.total_invest_amount || 0}</span></div>
                   </div>
                 </CardContent>
               </Card>

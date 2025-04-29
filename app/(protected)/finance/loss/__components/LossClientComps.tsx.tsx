@@ -169,7 +169,7 @@ export default function LossClientComps({ accessToken }: { accessToken?: string 
                         ) : (
                           <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center">
-                              No expenses found.
+                              No Losss found.
                             </TableCell>
                           </TableRow>
                         )}
