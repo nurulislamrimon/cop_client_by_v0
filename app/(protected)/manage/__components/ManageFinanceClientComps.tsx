@@ -42,7 +42,7 @@ export default function StatisticsPage({ accessToken }: { accessToken?: string }
     const getSnapshots = async () => {
       setLoading(true);
       try {
-        let query = `/transaction/snapshot/by-admin?page=1&limit=100`;
+        let query = `/transaction/snapshot/by-admin?sortBy=collected_at&sortOrder=asc&page=1&limit=100`;
         if (filter) {
           query += `&member_id=${filter}`;
         }

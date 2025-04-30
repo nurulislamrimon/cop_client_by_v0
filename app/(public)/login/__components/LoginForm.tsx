@@ -36,7 +36,7 @@ export default function LoginForm() {
                 if (Array.isArray(errorMessages)) {
                     errorMessages.forEach((e) => toast.error(e.message))
                 } else {
-                    toast.error("Invalid credentials")
+                    toast.error(String(e))
                 }
             }
         } catch {

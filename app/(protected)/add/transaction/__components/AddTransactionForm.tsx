@@ -22,6 +22,7 @@ export default function AddTransactionPage({ accessToken }: { accessToken?: stri
         trx_type: "Deposit",
         amount: "",
         note: "",
+        collected_at: new Date().toISOString(),
     });
 
     useEffect(() => {
@@ -68,6 +69,7 @@ export default function AddTransactionPage({ accessToken }: { accessToken?: stri
                     trx_type: formData.trx_type,
                     amount: Number(formData.amount),
                     note: formData.note,
+                    collected_at: formData.collected_at
                 },
                 revalidatePaths: ["/", "/finance"],
             });
@@ -187,7 +189,16 @@ export default function AddTransactionPage({ accessToken }: { accessToken?: stri
                                     onChange={handleChange}
                                 />
                             </div>
-
+                            <div>
+                                <label className="block mb-1 text-sm font-medium">Collected At</label>
+                                <Input
+                                    name="collected_at"
+                                    type="datetime-local"
+                                    value={formData?.collected_at}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
                             {/* Submit Button */}
                             <Button
                                 type="submit"

@@ -18,6 +18,7 @@ interface UpdateTransactionFormProps {
         trx_type: string;
         amount: number;
         note: string;
+        collected_at: string;
     };
     accessToken?: string
 }
@@ -34,6 +35,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
         trx_type: initialData?.trx_type,
         amount: String(initialData?.amount),
         note: initialData?.note || "",
+        collected_at: initialData?.collected_at || new Date().toDateString(),
     });
 
     useEffect(() => {
@@ -81,6 +83,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
                     trx_type: formData.trx_type,
                     amount: Number(formData.amount),
                     note: formData.note,
+                    collected_at: formData.collected_at
                 },
                 revalidatePaths: ["/", "/finance"],
             });
@@ -201,6 +204,16 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
                                 />
                             </div>
 
+                            <div>
+                                <label className="block mb-1 text-sm font-medium">Collected At</label>
+                                <Input
+                                    name="collected_at"
+                                    type="datetime-local"
+                                    value={formData?.collected_at}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
                             {/* Submit Button */}
                             <Button
                                 type="submit"
