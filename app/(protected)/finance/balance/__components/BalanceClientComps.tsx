@@ -25,7 +25,7 @@ export default function BalanceClientComps({ user = {} }: { user: Record<string,
         { label: "Total Deposit", amount: transaction_snapshot?.total_deposit_amount || 0 },
         { label: "Total Withdraw", amount: transaction_snapshot?.total_withdraw_amount || 0 },
         { label: "Total Expense", amount: transaction_snapshot?.total_expense_amount || 0 },
-        { label: "Total Invest", amount: transaction_snapshot?.total_invest_amount || 0 },
+        { label: "Total Invest", amount: transaction_snapshot?.total_investment_amount || 0 },
         { label: "Total Profit", amount: transaction_snapshot?.total_profit_amount || 0 },
         { label: "Total Loss", amount: transaction_snapshot?.total_loss_amount || 0 },
     ]
