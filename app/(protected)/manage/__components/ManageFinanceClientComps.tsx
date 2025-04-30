@@ -81,9 +81,9 @@ export default function StatisticsPage({ accessToken }: { accessToken?: string }
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {data.map((item) => (
+            {data.map((item, i) => (
               <Card
-                key={item.id || 0}
+                key={i || 0}
                 className="shadow-lg hover:shadow-xl transition rounded-2xl p-4"
               >
                 <CardContent className="space-y-2">
