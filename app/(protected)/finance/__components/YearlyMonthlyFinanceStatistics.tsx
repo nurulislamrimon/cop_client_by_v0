@@ -201,15 +201,15 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
                             </div>
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium">Lose</span>
+                                    <span className="text-sm font-medium">Loss</span>
                                     <span className="text-sm font-medium">
-                                        <small>Last Month -</small> {(monthlyStats?.currentMonth?.Lose || 0) + currency}
+                                        <small>Last Month -</small> {(monthlyStats?.currentMonth?.Loss || 0) + currency}
                                         <br />
-                                        <small>Prev Month - </small>{(monthlyStats?.previousMonth?.Lose || 0) + currency}
+                                        <small>Prev Month - </small>{(monthlyStats?.previousMonth?.Loss || 0) + currency}
                                     </span>
                                 </div>
                                 <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (monthlyStats?.difference?.Lose || 0) + "%" }}></div>
+                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (monthlyStats?.difference?.Loss || 0) + "%" }}></div>
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -222,7 +222,7 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
                                     </span>
                                 </div>
                                 <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (monthlyStats?.difference?.Lose || 0) + "%" }}></div>
+                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (monthlyStats?.difference?.Loss || 0) + "%" }}></div>
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -235,7 +235,7 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
                                     </span>
                                 </div>
                                 <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (monthlyStats?.difference?.Lose || 0) + "%" }}></div>
+                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (monthlyStats?.difference?.Loss || 0) + "%" }}></div>
                                 </div>
                             </div>
                         </div>
@@ -289,15 +289,15 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
                             </div>
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium">Lose</span>
+                                    <span className="text-sm font-medium">Loss</span>
                                     <span className="text-sm font-medium">
-                                        <small>Last Year -</small> {(yearlyStats?.currentYear?.Lose || 0) + currency}
+                                        <small>Last Year -</small> {(yearlyStats?.currentYear?.Loss || 0) + currency}
                                         <br />
-                                        <small>Prev Year - </small>{(yearlyStats?.previousYear?.Lose || 0) + currency}
+                                        <small>Prev Year - </small>{(yearlyStats?.previousYear?.Loss || 0) + currency}
                                     </span>
                                 </div>
                                 <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (yearlyStats?.difference?.Lose || 0) + "%" }}></div>
+                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (yearlyStats?.difference?.Loss || 0) + "%" }}></div>
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -310,7 +310,7 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
                                     </span>
                                 </div>
                                 <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (yearlyStats?.difference?.Lose || 0) + "%" }}></div>
+                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (yearlyStats?.difference?.Loss || 0) + "%" }}></div>
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -323,7 +323,7 @@ export default function YearlyMonthlyFinanceStatistics({ accessToken }: { access
                                     </span>
                                 </div>
                                 <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (yearlyStats?.difference?.Lose || 0) + "%" }}></div>
+                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: (yearlyStats?.difference?.Loss || 0) + "%" }}></div>
                                 </div>
                             </div>
                         </div>

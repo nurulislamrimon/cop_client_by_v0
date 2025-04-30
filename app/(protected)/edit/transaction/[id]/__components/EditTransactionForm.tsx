@@ -171,7 +171,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
                                     <option value="Deposit">Deposit</option>
                                     <option value="Withdraw">Withdraw</option>
                                     <option value="Profit">Profit</option>
-                                    <option value="Lose">Lose</option>
+                                    <option value="Loss">Loss</option>
                                     <option value="Expense">Expense</option>
                                     <option value="Investment">Investment</option>
                                 </select>

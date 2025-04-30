@@ -12,13 +12,13 @@ interface Snapshot {
   total_withdraw: number;
   total_expense: number;
   total_profit: number;
-  total_lose: number;
+  total_loss: number;
   total_invest: number;
   total_deposit_amount: number;
   total_withdraw_amount: number;
   total_expense_amount: number;
   total_profit_amount: number;
-  total_lose_amount: number;
+  total_loss_amount: number;
   total_invest_amount: number;
   member_id: number;
   balance: number;
@@ -104,7 +104,7 @@ export default function StatisticsPage({ accessToken }: { accessToken?: string }
                     <div>Total Withdraw: <span className="font-bold">{item.total_withdraw || 0}</span></div>
                     <div>Total Expense: <span className="font-bold">{item.total_expense || 0}</span></div>
                     <div>Total Profit: <span className="font-bold">{item.total_profit || 0}</span></div>
-                    <div>Total Lose: <span className="font-bold">{item.total_lose || 0}</span></div>
+                    <div>Total Loss: <span className="font-bold">{item.total_loss || 0}</span></div>
                     <div>Total Invest: <span className="font-bold">{item.total_invest || 0}</span></div>
                   </div>
 
@@ -113,7 +113,7 @@ export default function StatisticsPage({ accessToken }: { accessToken?: string }
                     <div>Withdraw Amount: <span className="font-medium">{item.total_withdraw_amount || 0}</span></div>
                     <div>Expense Amount: <span className="font-medium">{item.total_expense_amount || 0}</span></div>
                     <div>Profit Amount: <span className="font-medium">{item.total_profit_amount || 0}</span></div>
-                    <div>Lose Amount: <span className="font-medium">{item.total_lose_amount || 0}</span></div>
+                    <div>Loss Amount: <span className="font-medium">{item.total_loss_amount || 0}</span></div>
                     <div>Invest Amount: <span className="font-medium">{item.total_invest_amount || 0}</span></div>
                   </div>
                 </CardContent>
