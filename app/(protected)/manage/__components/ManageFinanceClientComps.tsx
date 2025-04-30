@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface Snapshot {
   id: number;
+  full_name: string;
   total_deposit: number;
   total_withdraw: number;
   total_expense: number;
@@ -88,7 +89,7 @@ export default function StatisticsPage({ accessToken }: { accessToken?: string }
               >
                 <CardContent className="space-y-2">
                   <div className="text-lg font-semibold">
-                    Member ID: {item.member_id || 0}
+                    {item?.full_name} - {item?.member_id || 0}
                   </div>
                   <div className="text-sm text-gray-700 font-semibold">
                     💰 Balance:{" "}
