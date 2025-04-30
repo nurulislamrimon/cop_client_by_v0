@@ -16,7 +16,6 @@ export default function BalanceClientComps({ user = {} }: { user: Record<string,
         joining_date,
         role,
         profile_photo,
-        balance,
         referred_by,
         transaction_snapshot,
     } = user
@@ -65,7 +64,7 @@ export default function BalanceClientComps({ user = {} }: { user: Record<string,
                 <Card className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-xl">
                     <CardContent className="p-6">
                         <h2 className="text-3xl font-bold">Current Balance</h2>
-                        <p className="text-5xl mt-2 font-semibold tracking-tight">{balance + currency}</p>
+                        <p className="text-5xl mt-2 font-semibold tracking-tight">{transaction_snapshot?.balance + currency}</p>
                         <p className="text-sm mt-1 opacity-80">As of today</p>
                     </CardContent>
                 </Card>

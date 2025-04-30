@@ -12,5 +12,5 @@ export default async function FinanceOverviewPage() {
     revalidate: revalidationTime
   });
 
-  return <FinanceOverviewPageClientComps balance={data?.data?.balance} statistics={data?.data?.transaction_snapshot} accessToken={accessToken} />;
+  return <FinanceOverviewPageClientComps statistics={data?.data?.transaction_snapshot} accessToken={accessToken} />;
 }

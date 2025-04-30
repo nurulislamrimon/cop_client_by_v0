@@ -9,12 +9,13 @@ import YearlyMonthlyFinanceStatistics from "./YearlyMonthlyFinanceStatistics"
 import { Suspense } from "react"
 import { currency } from "@/constants/common.constants"
 
-export default function FinanceOverviewPageClientComps({ balance, statistics, accessToken }: { balance?: number; statistics?: Record<string, number>, accessToken?: string }) {
+export default function FinanceOverviewPageClientComps({ statistics, accessToken }: { balance?: number; statistics?: Record<string, number>, accessToken?: string }) {
 
   const [statsRef, statsInView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   })
+
 
   return (
     <PageTransition>
@@ -33,7 +34,7 @@ export default function FinanceOverviewPageClientComps({ balance, statistics, ac
           {[
             {
               title: "Present Balance",
-              value: balance + currency,
+              value: statistics?.balance + currency,
               icon: Banknote,
               color: "text-green-500",
               bgColor: "bg-green-100 dark:bg-green-900",
