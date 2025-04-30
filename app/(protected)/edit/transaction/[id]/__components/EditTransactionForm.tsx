@@ -40,7 +40,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
         async function fetchMembers() {
             setMemberLoading(true);
             try {
-                const result = await fetcher("/member?searchTerm=" + memberSearch);
+                const result = await fetcher("/member?sortBy=id&sortOrder=asc&searchTerm=" + memberSearch);
                 if (result.success && Array.isArray(result?.data)) {
                     setMembers(result.data);
                 } else {

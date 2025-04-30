@@ -28,7 +28,7 @@ export default function AddTransactionPage({ accessToken }: { accessToken?: stri
         async function fetchMembers() {
             setMemberLoading(true);
             try {
-                const result = await fetcher("/member?sortOrder=asc&searchTerm=" + memberSearch);
+                const result = await fetcher("/member?sortBy=id&sortOrder=asc&searchTerm=" + memberSearch);
                 if (result.success && Array.isArray(result?.data)) {
                     setMembers(result.data);
                 } else {

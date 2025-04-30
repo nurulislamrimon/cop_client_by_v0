@@ -49,7 +49,6 @@ export default function Sidebar() {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   useEffect(() => {
-    console.log(isLoggedIn, "------------------")
     if (isLoggedIn?.role === "super_admin") {
       menuItems[menuItems.length - 1].submenu?.push(
         { name: "Manage", path: "/manage" }

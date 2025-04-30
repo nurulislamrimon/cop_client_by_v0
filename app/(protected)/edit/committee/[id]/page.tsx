@@ -10,7 +10,7 @@ export default async function EditCommitteePage({ params }: { params: Promise<{ 
     const id = Number(param.id);
 
     const committeeData = await fetcher(`/committee/${id}`, { authToken: accessToken });
-    const membersData = await fetcher(`/member?sortOrder=asc&limit=100`, { authToken: accessToken });
+    const membersData = await fetcher(`/member?sortBy=id&sortOrder=asc&limit=100`, { authToken: accessToken });
 
     return <EditCommitteeForm committeeId={id} initialData={committeeData?.data} members={membersData?.data} accessToken={accessToken} />
 }
