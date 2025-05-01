@@ -41,7 +41,6 @@ export default function ManageOverviewClientComps({
   const [data, setData] = useState<Snapshot[]>([]);
   const [grandTotal, setGrandTotal] = useState<GrandTotal | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log(data, "=======");
 
   useEffect(() => {
     const getSnapshots = async () => {
@@ -86,6 +85,45 @@ export default function ManageOverviewClientComps({
         </div>
       ) : (
         <>
+          {grandTotal && (
+            <Card className="mt-8 p-6 rounded-2xl shadow-md border-t-4 border-blue-600 bg-blue-50">
+              <CardContent className="space-y-2 text-blue-900">
+                <h2 className="text-xl font-bold">Grand Total</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div>
+                    Total Deposit Amount:{" "}
+                    <span className="font-semibold">
+                      {grandTotal.total_deposit_amount}
+                    </span>
+                  </div>
+                  <div>
+                    Total Withdraw Amount:{" "}
+                    <span className="font-semibold">
+                      {grandTotal.total_withdraw_amount}
+                    </span>
+                  </div>
+                  <div>
+                    Total Expense Amount:{" "}
+                    <span className="font-semibold">
+                      {grandTotal.total_expense_amount}
+                    </span>
+                  </div>
+                  <div>
+                    Total Balance:{" "}
+                    <span
+                      className={`font-semibold ${
+                        grandTotal.total_balance >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {grandTotal.total_balance}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {data.map((item, i) => (
               <Card
@@ -193,46 +231,6 @@ export default function ManageOverviewClientComps({
               No results found for Member ID:{" "}
               <span className="font-semibold">{filter}</span>
             </div>
-          )}
-
-          {grandTotal && (
-            <Card className="mt-8 p-6 rounded-2xl shadow-md border-t-4 border-blue-600 bg-blue-50">
-              <CardContent className="space-y-2 text-blue-900">
-                <h2 className="text-xl font-bold">Grand Total</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div>
-                    Total Deposit Amount:{" "}
-                    <span className="font-semibold">
-                      {grandTotal.total_deposit_amount}
-                    </span>
-                  </div>
-                  <div>
-                    Total Withdraw Amount:{" "}
-                    <span className="font-semibold">
-                      {grandTotal.total_withdraw_amount}
-                    </span>
-                  </div>
-                  <div>
-                    Total Expense Amount:{" "}
-                    <span className="font-semibold">
-                      {grandTotal.total_expense_amount}
-                    </span>
-                  </div>
-                  <div>
-                    Total Balance:{" "}
-                    <span
-                      className={`font-semibold ${
-                        grandTotal.total_balance >= 0
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {grandTotal.total_balance}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           )}
         </>
       )}
