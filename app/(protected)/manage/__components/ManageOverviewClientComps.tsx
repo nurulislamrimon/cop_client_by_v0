@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { fetcher } from "@/server_actions/fetcher";
@@ -38,7 +38,6 @@ export default function ManageOverviewClientComps({
 }: {
   accessToken?: string;
 }) {
-  const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const [data, setData] = useState<Snapshot[]>([]);
   const [grandTotal, setGrandTotal] = useState<GrandTotal | null>(null);
@@ -49,9 +48,6 @@ export default function ManageOverviewClientComps({
       setLoading(true);
       try {
         let query = `/transaction/snapshot/by-admin?page=1&limit=50`;
-        if (filter) {
-          query += `&member_id=${filter}`;
-        }
         if (search) {
           query += `&searchTerm=${search}`;
         }
@@ -65,30 +61,19 @@ export default function ManageOverviewClientComps({
         setLoading(false);
       }
     },
-    deps: [accessToken, filter, search],
+    deps: [accessToken, search],
   });
 
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold">📊 Transaction Snapshots</h1>
-      <div className="flex items-center space-x-5 space-y-5 flex-wrap">
-        <div className="flex items-center">
-          <Input
-            placeholder="Search ..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-64"
-          />
-        </div>
-        <div className="flex items-center">
-          <Input
-            placeholder="Filter by Member ID..."
-            type="number"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="w-64"
-          />
-        </div>
+      <div className="flex items-center">
+        <Input
+          placeholder="Search ..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-64"
+        />
       </div>
 
       {loading ? (
@@ -207,7 +192,6 @@ export default function ManageOverviewClientComps({
           {data.length === 0 && (
             <div className="text-center text-gray-500 mt-10">
               No results found for Member ID:{" "}
-              <span className="font-semibold">{filter}</span>
             </div>
           )}
         </>
