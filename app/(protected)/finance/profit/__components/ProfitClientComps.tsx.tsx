@@ -32,6 +32,8 @@ import { fetcher } from "@/server_actions/fetcher";
 import { currency } from "@/constants/common.constants";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDebouncedApi } from "@/hooks/use-debounce-api";
+import Paginate from "@/components/ui/pagination";
 
 type Profit = {
   id: number;
@@ -54,13 +56,16 @@ export default function ProfitClientComps({
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 10;
   const router = useRouter();
 
-  useEffect(() => {
-    const getProfits = async () => {
+  useDebouncedApi({
+    handler: async () => {
       setLoading(true);
 
-      let query = `/transaction?trx_type=Profit`;
+      let query = `/transaction?trx_type=Deposit&page=${page}&limit=${limit}`;
 
       if (sortType === "amountasc") {
         query += "&sortBy=amount&sortOrder=asc";
@@ -85,11 +90,11 @@ export default function ProfitClientComps({
       const data = await fetcher(query, { authToken: accessToken });
 
       setProfits(data?.data || []);
+      setTotal(data?.meta?.total || 0);
       setLoading(false);
-    };
-
-    getProfits();
-  }, [accessToken, sortType, searchQuery, startDate, endDate]);
+    },
+    deps: [accessToken, sortType, searchQuery, startDate, endDate, page],
+  });
 
   return (
     <PageTransition>
@@ -157,6 +162,11 @@ export default function ProfitClientComps({
                         className="w-[150px]"
                       />
                     </div>
+                    <Paginate
+                      currentPage={page}
+                      totalPages={Math.ceil(total / limit)}
+                      onPageChange={(p) => setPage(p)}
+                    />
                   </div>
 
                   <div className="rounded-md border">
@@ -208,7 +218,7 @@ export default function ProfitClientComps({
                         ) : (
                           <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center">
-                              No Losss found.
+                              No Profit found.
                             </TableCell>
                           </TableRow>
                         )}
