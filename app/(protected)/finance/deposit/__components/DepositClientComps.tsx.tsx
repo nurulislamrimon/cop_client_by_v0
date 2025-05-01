@@ -1,69 +1,94 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Tabs, TabsContent } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Plus, Search } from "lucide-react"
-import PageTransition from "@/components/page-transition"
-import { fetcher } from "@/server_actions/fetcher"
-import { currency } from "@/constants/common.constants"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, Search } from "lucide-react";
+import PageTransition from "@/components/page-transition";
+import { fetcher } from "@/server_actions/fetcher";
+import { currency } from "@/constants/common.constants";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 type Deposit = {
-  id: number
-  amount: number
-  collected_at: string
-  member_id: number
-  member: { full_name: string }
-  trx_type: string
-  note: string | null
-}
+  id: number;
+  amount: number;
+  collected_at: string;
+  member_id: number;
+  member: { full_name: string };
+  trx_type: string;
+  note: string | null;
+};
 
-export default function DepositClientComps({ accessToken }: { accessToken?: string }) {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [sortType, setSortType] = useState("recent")
-  const [deposits, setDeposits] = useState<Deposit[]>([])
-  const [loading, setLoading] = useState(true)
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
-  const router = useRouter()
+export default function DepositClientComps({
+  accessToken,
+}: {
+  accessToken?: string;
+}) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortType, setSortType] = useState("recent");
+  const [deposits, setDeposits] = useState<Deposit[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const getDeposits = async () => {
-      setLoading(true)
+      setLoading(true);
 
-      let query = `/transaction?trx_type=Deposit`
+      let query = `/transaction?trx_type=Deposit`;
 
       if (sortType === "amountasc") {
-        query += "&sortBy=amount&&sortOrder=asc"
+        query += "&sortBy=amount&sortOrder=asc";
       } else if (sortType === "amountdesc") {
-        query += "&sortBy=amount&&sortOrder=desc"
+        query += "&sortBy=amount&sortOrder=desc";
+      } else {
+        query += "&sortBy=collected_at&sortOrder=desc";
       }
 
       if (searchQuery) {
-        query += "&searchTerm=" + searchQuery
+        query += "&searchTerm=" + searchQuery;
       }
 
       if (startDate) {
-        query += "&collected_at[gt]=" + startDate
+        query += "&collected_at[gt]=" + startDate;
       }
 
       if (endDate) {
-        query += "&collected_at[lt]=" + endDate
+        query += "&collected_at[lt]=" + endDate;
       }
 
-      const data = await fetcher(query, { authToken: accessToken })
+      const data = await fetcher(query, { authToken: accessToken });
 
-      setDeposits(data?.data || [])
-      setLoading(false)
-    }
+      setDeposits(data?.data || []);
+      setLoading(false);
+    };
 
-    getDeposits()
-  }, [accessToken, sortType, searchQuery, startDate, endDate])
+    getDeposits();
+  }, [accessToken, sortType, searchQuery, startDate, endDate]);
 
   return (
     <PageTransition>
@@ -83,7 +108,9 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
             <Card>
               <CardHeader>
                 <CardTitle>Deposit History</CardTitle>
-                <CardDescription>View all deposits made by members</CardDescription>
+                <CardDescription>
+                  View all deposits made by members
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -105,8 +132,12 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="recent">Recent</SelectItem>
-                        <SelectItem value="amountasc">Amount (Low-High)</SelectItem>
-                        <SelectItem value="amountdesc">Amount (High-Low)</SelectItem>
+                        <SelectItem value="amountasc">
+                          Amount (Low-High)
+                        </SelectItem>
+                        <SelectItem value="amountdesc">
+                          Amount (High-Low)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
 
@@ -150,15 +181,25 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
                               key={deposit.id}
                               className="group relative"
                             >
-                              <TableCell>{new Date(deposit.collected_at).toDateString()}</TableCell>
-                              <TableCell>{deposit?.member?.full_name}</TableCell>
-                              <TableCell className="font-medium">{(deposit.amount.toFixed(2)) + currency}</TableCell>
+                              <TableCell>
+                                {new Date(deposit.collected_at).toDateString()}
+                              </TableCell>
+                              <TableCell>
+                                {deposit?.member?.full_name}
+                              </TableCell>
+                              <TableCell className="font-medium">
+                                {deposit.amount.toFixed(2) + currency}
+                              </TableCell>
                               <TableCell>{deposit.note || "-"}</TableCell>
                               <TableCell className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => router.push(`/edit/transaction/${deposit.id}`)}
+                                  onClick={() =>
+                                    router.push(
+                                      `/edit/transaction/${deposit.id}`
+                                    )
+                                  }
                                 >
                                   Edit
                                 </Button>
@@ -182,5 +223,5 @@ export default function DepositClientComps({ accessToken }: { accessToken?: stri
         </Tabs>
       </div>
     </PageTransition>
-  )
+  );
 }
