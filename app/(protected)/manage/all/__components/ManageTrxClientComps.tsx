@@ -32,8 +32,8 @@ import { fetcher } from "@/server_actions/fetcher";
 import { currency } from "@/constants/common.constants";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { debounce } from "@/utils/debounce";
 import { useDebouncedApi } from "@/hooks/use-debounce-api";
+import Paginate from "@/components/ui/pagination";
 
 type Transaction = {
   id: number;
@@ -66,7 +66,6 @@ export default function ManageTrxClientComps({
   useDebouncedApi({
     handler: async () => {
       setLoading(true);
-
       let query = `/transaction/by-admin?page=${page}&limit=${limit}`;
 
       if (sortType === "amountasc") {
@@ -196,33 +195,14 @@ export default function ManageTrxClientComps({
                         className="w-[150px]"
                       />
                     </div>
-                    <div className="flex justify-between items-center pt-4 ms-auto">
-                      <span className="text-sm text-muted-foreground px-5">
-                        Page {page} of {Math.ceil(total / limit)}
-                      </span>
-                      <div className="space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                          disabled={page === 1}
-                        >
-                          Previous
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            setPage((p) =>
-                              p < Math.ceil(total / limit) ? p + 1 : p
-                            )
-                          }
-                          disabled={page >= Math.ceil(total / limit)}
-                        >
-                          Next
-                        </Button>
-                      </div>
-                    </div>
+
+                    <Paginate
+                      currentPage={page}
+                      totalPages={Math.ceil(total / limit)}
+                      onPageChange={(p) => {
+                        setPage(p);
+                      }}
+                    />
                   </div>
 
                   {/* Table */}

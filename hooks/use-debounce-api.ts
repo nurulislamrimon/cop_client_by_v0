@@ -7,17 +7,25 @@ interface UseDebouncedApiProps {
   delay?: number;
 }
 
-/**
- * A centralized hook to debounce any effect-driven API call
- */
 export function useDebouncedApi({
   handler,
   deps,
   delay = 500,
 }: UseDebouncedApiProps) {
-  const debouncedHandler = useRef(debounce(handler, delay)).current;
+  const handlerRef = useRef(handler);
+
+  // Always update handler ref
+  useEffect(() => {
+    handlerRef.current = handler;
+  }, [handler]);
+
+  const debounced = useRef(
+    debounce(() => {
+      handlerRef.current();
+    }, delay)
+  ).current;
 
   useEffect(() => {
-    debouncedHandler();
-  }, [...deps]);
+    debounced();
+  }, deps);
 }
