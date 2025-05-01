@@ -1,25 +1,33 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect, useCallback, useMemo } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Search, ChevronLeft, ChevronRight } from "lucide-react"
-import { IMeta } from "@/interfaces/meta"
-import { debounce } from "@/utils/debounce"
+import type React from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { IMeta } from "@/interfaces/meta";
+import { debounce } from "@/utils/debounce";
+import Paginate from "./ui/pagination";
 
 interface DataTableProps<T> {
-  data?: T[]
-  meta?: IMeta
+  data?: T[];
+  meta?: IMeta;
   columns: {
-    key: string
-    title: string
-    render?: (item: T) => React.ReactNode
-  }[]
-  searchKey?: string
-  onRowClick?: (item: T) => void
+    key: string;
+    title: string;
+    render?: (item: T) => React.ReactNode;
+  }[];
+  searchKey?: string;
+  onRowClick?: (item: T) => void;
 }
 
 export default function DataTable<T extends Record<string, any>>({
@@ -29,41 +37,43 @@ export default function DataTable<T extends Record<string, any>>({
   searchKey,
   onRowClick,
 }: DataTableProps<T>) {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const initialSearch = searchParams.get("search") || ""
-  const [searchQuery, setSearchQuery] = useState(initialSearch)
+  const initialSearch = searchParams.get("search") || "";
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
 
-  const currentPage = parseInt(searchParams.get("page") || "1", 10)
-  const totalPages = meta ? Math.ceil(meta?.total / meta?.limit) : 1
-  const itemsPerPage = meta?.limit || 10
-  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  const totalPages = meta ? Math.ceil(meta?.total / meta?.limit) : 1;
+  const itemsPerPage = meta?.limit || 10;
 
   const updateInUrl = (field: string, value: string | number) => {
-    const params = new URLSearchParams(searchParams)
-    params.set(field, value.toString())
-    router.push(`?${params.toString()}`)
-  }
+    const params = new URLSearchParams(searchParams);
+    params.set(field, value.toString());
+    router.push(`?${params.toString()}`);
+  };
 
+  const updatePage = (page: number) => {
+    updateInUrl("page", page);
+  };
 
   const debouncedUpdateInUrl = useMemo(
     () =>
       debounce((value: string) => {
-        const params = new URLSearchParams(searchParams.toString())
+        const params = new URLSearchParams(searchParams.toString());
         if (value) {
-          params.set("search", value)
+          params.set("search", value);
         } else {
-          params.delete("search")
+          params.delete("search");
         }
-        router.push(`?${params.toString()}`)
+        router.push(`?${params.toString()}`);
       }, 300),
     [searchParams, router]
-  )
+  );
 
   useEffect(() => {
-    setSearchQuery(initialSearch)
-  }, [initialSearch])
+    setSearchQuery(initialSearch);
+  }, [initialSearch]);
 
   return (
     <div className="space-y-4">
@@ -76,9 +86,9 @@ export default function DataTable<T extends Record<string, any>>({
             className="pl-8"
             value={searchQuery}
             onChange={(e) => {
-              const value = e.target.value
-              setSearchQuery(value)
-              debouncedUpdateInUrl(value)
+              const value = e.target.value;
+              setSearchQuery(value);
+              debouncedUpdateInUrl(value);
             }}
           />
         </div>
@@ -103,16 +113,17 @@ export default function DataTable<T extends Record<string, any>>({
                 >
                   {columns.map((column) => (
                     <TableCell key={column.key}>
-                      {column.render
-                        ? column.render(item)
-                        : item[column.key]}
+                      {column.render ? column.render(item) : item[column.key]}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results found.
                 </TableCell>
               </TableRow>
@@ -121,34 +132,11 @@ export default function DataTable<T extends Record<string, any>>({
         </Table>
       </div>
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {startIndex + 1}-{Math.min(startIndex + (data?.length || 1), meta?.total || 1)} of {meta?.total}
-          </p>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => updateInUrl('page', currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-sm">
-              Page {currentPage} of {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => updateInUrl('page', currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      )}
+      <Paginate
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(p) => updatePage(p)}
+      />
     </div>
-  )
+  );
 }
