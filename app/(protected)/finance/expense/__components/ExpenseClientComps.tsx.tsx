@@ -32,6 +32,8 @@ import { fetcher } from "@/server_actions/fetcher";
 import { currency } from "@/constants/common.constants";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDebouncedApi } from "@/hooks/use-debounce-api";
+import Paginate from "@/components/ui/pagination";
 
 type Expense = {
   id: number;
@@ -54,13 +56,16 @@ export default function ExpenseClientComps({
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 10;
   const router = useRouter();
 
-  useEffect(() => {
-    const getExpenses = async () => {
+  useDebouncedApi({
+    handler: async () => {
       setLoading(true);
 
-      let query = `/transaction?trx_type=Expense`;
+      let query = `/transaction?trx_type=Expense&page=${page}&limit=${limit}`;
 
       if (sortType === "amountasc") {
         query += "&sortBy=amount&sortOrder=asc";
@@ -85,11 +90,11 @@ export default function ExpenseClientComps({
       const data = await fetcher(query, { authToken: accessToken });
 
       setExpenses(data?.data || []);
+      setTotal(data?.meta?.total || 0);
       setLoading(false);
-    };
-
-    getExpenses();
-  }, [accessToken, sortType, searchQuery, startDate, endDate]);
+    },
+    deps: [accessToken, sortType, searchQuery, startDate, endDate, page],
+  });
 
   return (
     <PageTransition>
@@ -126,7 +131,6 @@ export default function ExpenseClientComps({
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
                     </div>
-
                     <Select value={sortType} onValueChange={setSortType}>
                       <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Sorting" />
@@ -141,7 +145,6 @@ export default function ExpenseClientComps({
                         </SelectItem>
                       </SelectContent>
                     </Select>
-
                     <div className="flex gap-2 items-center">
                       <Input
                         type="date"
@@ -157,6 +160,11 @@ export default function ExpenseClientComps({
                         className="w-[150px]"
                       />
                     </div>
+                    <Paginate
+                      currentPage={page}
+                      totalPages={Math.ceil(total / limit)}
+                      onPageChange={(p) => setPage(p)}
+                    />
                   </div>
 
                   <div className="rounded-md border">

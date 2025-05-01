@@ -65,7 +65,7 @@ export default function LossClientComps({
     handler: async () => {
       setLoading(true);
 
-      let query = `/transaction?trx_type=Deposit&page=${page}&limit=${limit}`;
+      let query = `/transaction?trx_type=Loss&page=${page}&limit=${limit}`;
 
       if (sortType === "amountasc") {
         query += "&sortBy=amount&sortOrder=asc";
