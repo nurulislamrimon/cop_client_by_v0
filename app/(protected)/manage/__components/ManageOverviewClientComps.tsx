@@ -146,44 +146,8 @@ export default function ManageOverviewClientComps({
                       {item.balance || 0}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                    <div>
-                      Total Deposit:{" "}
-                      <span className="font-bold">
-                        {item.total_deposit || 0}
-                      </span>
-                    </div>
-                    <div>
-                      Total Withdraw:{" "}
-                      <span className="font-bold">
-                        {item.total_withdraw || 0}
-                      </span>
-                    </div>
-                    <div>
-                      Total Expense:{" "}
-                      <span className="font-bold">
-                        {item.total_expense || 0}
-                      </span>
-                    </div>
-                    <div>
-                      Total Profit:{" "}
-                      <span className="font-bold">
-                        {item.total_profit || 0}
-                      </span>
-                    </div>
-                    <div>
-                      Total Loss:{" "}
-                      <span className="font-bold">{item.total_loss || 0}</span>
-                    </div>
-                    <div>
-                      Total Invest:{" "}
-                      <span className="font-bold">
-                        {item.total_invest || 0}
-                      </span>
-                    </div>
-                  </div>
 
-                  <div className="pt-2 border-t mt-2 text-sm text-gray-500 grid grid-cols-2 gap-2">
+                  <div className="pt-2 mt-2 text-sm text-gray-500 grid grid-cols-2 gap-2">
                     <div>
                       Deposit Amount:{" "}
                       <span className="font-medium">
