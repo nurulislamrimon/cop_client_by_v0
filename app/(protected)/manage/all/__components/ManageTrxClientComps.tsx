@@ -33,6 +33,7 @@ import { currency } from "@/constants/common.constants";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { debounce } from "@/utils/debounce";
+import { useDebouncedApi } from "@/hooks/use-debounce-api";
 
 type Transaction = {
   id: number;
@@ -62,62 +63,43 @@ export default function ManageTrxClientComps({
   const limit = 20;
   const router = useRouter();
 
-  const getTransactions = useCallback(async () => {
-    setLoading(true);
+  useDebouncedApi({
+    handler: async () => {
+      setLoading(true);
 
-    let query = `/transaction/by-admin?page=${page}&limit=${limit}`;
+      let query = `/transaction/by-admin?page=${page}&limit=${limit}`;
 
-    if (sortType === "amountasc") {
-      query += "&sortBy=amount&sortOrder=asc";
-    } else if (sortType === "amountdesc") {
-      query += "&sortBy=amount&sortOrder=desc";
-    } else {
-      query += "&sortBy=collected_at&sortOrder=desc";
-    }
+      if (sortType === "amountasc") {
+        query += "&sortBy=amount&sortOrder=asc";
+      } else if (sortType === "amountdesc") {
+        query += "&sortBy=amount&sortOrder=desc";
+      } else {
+        query += "&sortBy=collected_at&sortOrder=desc";
+      }
 
-    if (searchQuery) {
-      query += "&searchTerm=" + searchQuery;
-    }
+      if (searchQuery) query += "&searchTerm=" + searchQuery;
+      if (startDate) query += "&collected_at[gt]=" + startDate;
+      if (endDate) query += "&collected_at[lt]=" + endDate;
+      if (trxType && trxType !== "all") query += "&trx_type=" + trxType;
+      if (memberId) query += "&member_id=" + memberId;
 
-    if (startDate) {
-      query += "&collected_at[gt]=" + startDate;
-    }
-
-    if (endDate) {
-      query += "&collected_at[lt]=" + endDate;
-    }
-
-    if (trxType && trxType !== "all") {
-      query += "&trx_type=" + trxType;
-    }
-
-    if (memberId) {
-      query += "&member_id=" + memberId;
-    }
-
-    const data = await fetcher(query, { authToken: accessToken });
-    setTransactions(data?.data || []);
-    setTotal(data?.meta?.total || 0);
-    setLoading(false);
-  }, [
-    accessToken,
-    sortType,
-    searchQuery,
-    startDate,
-    endDate,
-    trxType,
-    memberId,
-    page,
-    limit,
-  ]);
-
-  const debouncedGetTransactions = useRef(
-    debounce(getTransactions, 500)
-  ).current;
-
-  useEffect(() => {
-    debouncedGetTransactions();
-  }, [getTransactions]);
+      const data = await fetcher(query, { authToken: accessToken });
+      setTransactions(data?.data || []);
+      setTotal(data?.meta?.total || 0);
+      setLoading(false);
+    },
+    deps: [
+      accessToken,
+      sortType,
+      searchQuery,
+      startDate,
+      endDate,
+      trxType,
+      memberId,
+      page,
+      limit,
+    ],
+  });
 
   return (
     <PageTransition>
