@@ -89,7 +89,7 @@ export default function DepositClientComps({
       const data = await fetcher(query, { authToken: accessToken });
 
       setDeposits(data?.data || []);
-      setTotal(data?.meta?.total || []);
+      setTotal(data?.meta?.total || 0);
       setLoading(false);
     },
     deps: [accessToken, sortType, searchQuery, startDate, endDate, page],
