@@ -146,41 +146,43 @@ export const Paginate: React.FC<PaginateProps> = ({
   const pages = createPageRange();
 
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            className="cursor-pointer"
-            onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-          />
-        </PaginationItem>
-
-        {pages.map((p, i) => (
-          <PaginationItem key={i}>
-            {p === "..." ? (
-              <PaginationEllipsis />
-            ) : (
-              <PaginationLink
-                isActive={p === currentPage}
-                onClick={() => onPageChange(p)}
-                href="#"
-              >
-                {p}
-              </PaginationLink>
-            )}
+    totalPages > 1 && (
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className="cursor-pointer"
+              onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
+            />
           </PaginationItem>
-        ))}
 
-        <PaginationItem>
-          <PaginationNext
-            className="cursor-pointer"
-            onClick={() =>
-              currentPage < totalPages && onPageChange(currentPage + 1)
-            }
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+          {pages.map((p, i) => (
+            <PaginationItem key={i}>
+              {p === "..." ? (
+                <PaginationEllipsis />
+              ) : (
+                <PaginationLink
+                  isActive={p === currentPage}
+                  onClick={() => onPageChange(p)}
+                  href="#"
+                >
+                  {p}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              className="cursor-pointer"
+              onClick={() =>
+                currentPage < totalPages && onPageChange(currentPage + 1)
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    )
   );
 };
 
