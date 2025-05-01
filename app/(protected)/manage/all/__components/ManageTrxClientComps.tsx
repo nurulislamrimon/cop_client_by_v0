@@ -43,7 +43,7 @@ type Transaction = {
   note: string | null;
 };
 
-export default function ManageClientComps({
+export default function ManageTrxClientComps({
   accessToken,
 }: {
   accessToken?: string;

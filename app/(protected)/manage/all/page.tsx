@@ -1,11 +1,9 @@
 import { cookies } from "next/headers";
-import ManageClientComps from "./__components/ManageClientComps";
-
+import ManageTrxClientComps from "./__components/ManageTrxClientComps";
 
 export default async function ManagePage() {
-
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
 
-  return <ManageClientComps accessToken={accessToken} />
+  return <ManageTrxClientComps accessToken={accessToken} />;
 }
