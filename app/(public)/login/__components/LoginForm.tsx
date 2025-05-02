@@ -9,6 +9,7 @@ import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { loginAction } from "@/server_actions/auth.server_action"
 import { useAuth } from "@/context/AuthContext"
+import PasswordInput from "@/components/ui/password-input"
 
 export default function LoginForm() {
     const { setIsLoggedIn } = useAuth()
@@ -64,7 +65,7 @@ export default function LoginForm() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 disabled={loading}
                             />
-                            <Input
+                            <PasswordInput
                                 type="password"
                                 placeholder="Password"
                                 value={password}

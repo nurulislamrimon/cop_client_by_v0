@@ -32,16 +32,16 @@ interface Member {
 
 export default function EditMemberForm({
     accessToken,
-    member,
+    member = {},
 }: {
     accessToken?: string;
-    member: Member;
+    member?: Partial<Member>;
 }) {
     const router = useRouter();
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const [formData, setFormData] = useState<Member>(member);
+    const [formData, setFormData] = useState<Partial<Member>>(member);
 
     useEffect(() => {
         setFormData(member);
