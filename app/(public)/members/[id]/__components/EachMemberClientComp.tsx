@@ -10,10 +10,20 @@ export default function EachMemberClientComp({
   let profile_photo = "";
 
   if (member) {
-    const { profile_photo: photo_field, profile_photo_url, ...rest } = member;
+    const { profile_photo: photo_field, profile_photo_url, date_of_birth, joining_date, created_at, ...rest } = member;
     memberData = rest;
     profile_photo = profile_photo_url;
     delete rest.profile_photo;
+    // dates modification
+    if (date_of_birth) {
+      memberData.date_of_birth = new Date(date_of_birth).toDateString()
+    }
+    if (joining_date) {
+      memberData.joining_date = new Date(joining_date).toDateString()
+    }
+    if (created_at) {
+      memberData.created_at = new Date(created_at).toDateString()
+    }
   }
 
   return (

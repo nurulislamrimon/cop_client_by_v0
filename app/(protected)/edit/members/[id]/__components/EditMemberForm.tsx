@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { fetcher } from "@/server_actions/fetcher";
 import { FileUploader } from "@/components/ui/file-uploader";
+import { toDatetimeLocalString } from "@/utils/format";
+import PasswordInput from "@/components/ui/password-input";
 
 interface Member {
     id: string;
@@ -17,6 +19,7 @@ interface Member {
     mother_name?: string;
     phone_number: string;
     email: string;
+    password?: string;
     address?: string;
     occupation?: string;
     reffered_by?: string;
@@ -24,6 +27,7 @@ interface Member {
     date_of_birth?: string;
     role?: string;
     profile_photo?: string;
+    profile_photo_url?: string;
 }
 
 export default function EditMemberForm({
@@ -151,15 +155,15 @@ export default function EditMemberForm({
                             <Input
                                 name="joining_date"
                                 label="Joining Date"
-                                type="date"
-                                value={formData.joining_date || ""}
+                                type="datetime-local"
+                                value={toDatetimeLocalString(formData.joining_date) || ""}
                                 onChange={handleChange}
                             />
                             <Input
                                 name="date_of_birth"
                                 label="Date of Birth"
-                                type="date"
-                                value={formData.date_of_birth || ""}
+                                type="datetime-local"
+                                value={toDatetimeLocalString(formData.date_of_birth) || ""}
                                 onChange={handleChange}
                             />
                             <Input
@@ -194,11 +198,16 @@ export default function EditMemberForm({
                                 value={formData.reffered_by || ""}
                                 onChange={handleChange}
                             />
+                            <PasswordInput name="password"
+                                label="Password"
+                                value={formData.password || ""}
+                                onChange={handleChange} />
 
                             <div className="md:col-span-2">
                                 <FileUploader
                                     label="Change Profile Photo (optional)"
                                     onFileSelect={handleFileSelect}
+                                    initialPreview={formData?.profile_photo_url}
                                 />
                             </div>
 

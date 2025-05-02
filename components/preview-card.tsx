@@ -13,6 +13,7 @@ import ConfirmDeleteModal from "@/components/ui/confirm-delete-modal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { mainRoutes } from "@/constants/common.constants";
+import { formatObjectKey } from "@/utils/format";
 
 
 interface PreviewCardProps {
@@ -103,7 +104,7 @@ export default function PreviewCard({ title, data, backLink, editPage, deleteUrl
                   {Object.entries(data)?.map(([key, value]) => (
                     <div key={key} className="space-y-1">
                       <p className="text-sm font-medium text-muted-foreground">
-                        {key?.charAt(0)?.toUpperCase() + key?.slice(1)?.replace(/([A-Z])/g, " $1")}
+                        {formatObjectKey(key)}
                       </p>
                       <p className="font-medium">{value || "-"}</p>
                     </div>

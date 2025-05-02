@@ -1,3 +1,5 @@
+// date format
+
 export function toDatetimeLocalString(date?: string | null): string {
   if (!date) return ''; // return empty string if null or undefined
 
@@ -12,4 +14,19 @@ export function toDatetimeLocalString(date?: string | null): string {
   const minutes = pad(d.getMinutes());
 
   return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+
+// field name format
+
+export function formatObjectKey(key: string) {
+  return key
+    ?.replace(/_/g, " ")
+    ?.replace(/([A-Z])/g, " $1")
+    ?.replace(/\s+/g, " ")
+    ?.trim()
+    ?.split(" ")
+    ?.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    ?.join(" ")
+
 }

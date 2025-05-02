@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { financeRoutes } from "@/constants/common.constants";
+import { toDatetimeLocalString } from "@/utils/format";
 
 interface UpdateTransactionFormProps {
     initialData?: {
@@ -209,7 +210,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
                                 <Input
                                     name="collected_at"
                                     type="datetime-local"
-                                    value={formData?.collected_at}
+                                    value={toDatetimeLocalString(formData?.collected_at)}
                                     onChange={handleChange}
                                     required
                                 />
