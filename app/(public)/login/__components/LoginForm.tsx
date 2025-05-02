@@ -17,7 +17,7 @@ export default function LoginForm() {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const searchParams = useSearchParams()
-    const callbackUrl = searchParams.get("callbackUrl") || "/"
+    const callbackUrl = searchParams.get("callbackUrl") || "/finance"
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()

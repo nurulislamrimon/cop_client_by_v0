@@ -17,6 +17,7 @@ const financeLinks = [
   { name: "Expense", path: "/finance/expense" },
   { name: "Balance", path: "/finance/balance" },
   { name: "Investment", path: "/finance/investment" },
+  { name: "Profile", path: "/profile" },
 ]
 
 export default function FinanceLayout({

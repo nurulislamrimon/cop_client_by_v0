@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { hasPermission } from "./utils/hasPermission"
 
 // Define protected routes and roles (if needed)
-const protectedRoutes = ["/finance", "/add", "/edit", "/manage"]
+const protectedRoutes = ["/finance", "/add", "/edit", "/profile", "/manage"]
 const adminRoutes = ["/manage"]
 
 export async function middleware(req: NextRequest) {

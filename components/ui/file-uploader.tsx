@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { UploadCloud, X } from "lucide-react";
 
@@ -6,16 +6,25 @@ interface FileUploaderProps {
   onFileSelect?: (file: File | null) => void;
   className?: string;
   label?: string;
+  initialPreview?: string | null;
 }
+
 
 export const FileUploader: React.FC<FileUploaderProps> = ({
   onFileSelect,
   className,
   label,
+  initialPreview
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialPreview) {
+      setPreview(initialPreview);
+    }
+  }, [initialPreview]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
