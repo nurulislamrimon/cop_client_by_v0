@@ -4,8 +4,12 @@ type User = {
     rules: string[];
 };
 
-export function hasPermission(user: User | undefined, requiredRules: string[] = []): boolean {
+export function hasPermission(user: User | Record<string, any> | undefined | null, requiredRules: string[] = []): boolean {
     if (!user) return false;
+
+    if (user.role === "super_admin") {
+        return true
+    }
 
     if (!requiredRules.length) return true;
 

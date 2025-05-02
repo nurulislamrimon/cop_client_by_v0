@@ -45,7 +45,6 @@ export default function DataTable<T extends Record<string, any>>({
 
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const totalPages = meta ? Math.ceil(meta?.total / meta?.limit) : 1;
-  const itemsPerPage = meta?.limit || 10;
 
   const updateInUrl = (field: string, value: string | number) => {
     const params = new URLSearchParams(searchParams);

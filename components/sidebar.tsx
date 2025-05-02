@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { logoutAction } from "@/server_actions/auth.server_action";
+import { hasPermission } from "@/utils/hasPermission";
 
 const menuItems = [
   { name: "Home", path: "/", icon: Home },
@@ -49,17 +50,26 @@ export default function Sidebar() {
   const [isMounted, setIsMounted] = useState(false);
   const { isLoggedIn, setIsLoggedIn } = useAuth();
 
+  const [sidebarItems, setSidebarItems] = useState(menuItems);
+
   useEffect(() => {
-    if (isLoggedIn?.role === "super_admin") {
-      menuItems[menuItems.length - 1].submenu?.push(
-        { name: "Manage", path: "/manage" }
-      )
-    } else if (isLoggedIn?.access_rule?.rules?.includes("manage:*")) {
-      menuItems[menuItems.length - 1].submenu?.push(
-        { name: "Manage", path: "/manage" }
-      )
+    if (isLoggedIn && hasPermission(isLoggedIn, ["manage:*"])) {
+      const updatedItems = menuItems.map((item) => {
+        if (item.name === "Finance") {
+          return {
+            ...item,
+            submenu: [...item.submenu ?? [], { name: "Manage", path: "/manage" }],
+          };
+        }
+        return item;
+      });
+      setSidebarItems(updatedItems);
+    } else {
+      setSidebarItems(menuItems);
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn]);
+
+
   useEffect(() => {
     setIsMounted(true);
 
@@ -155,7 +165,7 @@ export default function Sidebar() {
             </div>
 
             <nav className="flex-1 space-y-1">
-              {menuItems.map((item, index) => (
+              {sidebarItems.map((item, index) => (
                 <div key={item.name} className="mb-1">
                   {item.submenu ? (
                     <>
