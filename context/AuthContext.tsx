@@ -13,11 +13,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoggedIn, setIsLoggedIn] = useState<Record<string, any> | null>(null)
 
     useEffect(() => {
-        const user = document.cookie.includes("user=");
-        if (user) {
-            setIsLoggedIn(JSON.parse(user as unknown as string))
+        const getCookie = (name: string) => {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? decodeURIComponent(match[2]) : null;
+        };
+
+        const userCookie = getCookie("user");
+        if (userCookie) {
+            try {
+                const parsedUser = JSON.parse(userCookie);
+                setIsLoggedIn(parsedUser);
+            } catch (error) {
+                console.error("Failed to parse user cookie", error);
+            }
         }
-    }, [])
+    }, []);
+
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
