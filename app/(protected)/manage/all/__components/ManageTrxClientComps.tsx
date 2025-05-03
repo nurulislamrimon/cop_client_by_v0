@@ -180,7 +180,7 @@ export default function ManageTrxClientComps({
                     />
 
                     {/* Date Range */}
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center flex-wrap">
                       <Input
                         type="date"
                         value={startDate}

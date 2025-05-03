@@ -148,10 +148,10 @@ export const Paginate: React.FC<PaginateProps> = ({
   return (
     totalPages > 1 && (
       <Pagination>
-        <PaginationContent>
+        <PaginationContent className="flex-wrap">
           <PaginationItem>
             <PaginationPrevious
-              className="cursor-pointer"
+              className="cursor-pointer text-xs"
               onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
             />
           </PaginationItem>
@@ -165,6 +165,7 @@ export const Paginate: React.FC<PaginateProps> = ({
                   isActive={p === currentPage}
                   onClick={() => onPageChange(p)}
                   href="#"
+                  className="text-xs"
                 >
                   {p}
                 </PaginationLink>
@@ -174,7 +175,7 @@ export const Paginate: React.FC<PaginateProps> = ({
 
           <PaginationItem>
             <PaginationNext
-              className="cursor-pointer"
+              className="cursor-pointer text-xs"
               onClick={() =>
                 currentPage < totalPages && onPageChange(currentPage + 1)
               }

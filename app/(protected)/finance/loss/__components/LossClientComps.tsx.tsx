@@ -147,7 +147,7 @@ export default function LossClientComps({
                       </SelectContent>
                     </Select>
 
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center flex-wrap">
                       <Input
                         type="date"
                         value={startDate}
