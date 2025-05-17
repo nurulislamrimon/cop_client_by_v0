@@ -131,7 +131,7 @@ export default function EditCommitteeForm({ accessToken, committeeId, members, i
                                     <option value="">-- None --</option>
                                     {members?.map((member) => (
                                         <option key={member.id} value={member.id}>
-                                            {member.full_name}
+                                            {member.id + " - " + member.full_name}
                                         </option>
                                     ))}
                                 </select>

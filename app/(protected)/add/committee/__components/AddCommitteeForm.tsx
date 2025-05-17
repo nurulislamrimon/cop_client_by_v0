@@ -122,7 +122,7 @@ export default function AddCommitteeForm({ accessToken, members }: AddCommitteeF
                                     <option value="">-- None --</option>
                                     {members?.map((member) => (
                                         <option key={member.id} value={member.id}>
-                                            {member.full_name}
+                                            {member.id + " - " + member.full_name}
                                         </option>
                                     ))}
                                 </select>
