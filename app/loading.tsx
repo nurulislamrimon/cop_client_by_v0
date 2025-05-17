@@ -2,7 +2,7 @@
 export default function Loading() {
     return (
         <div className="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
-            <span className="text-lg font-semibold">Loading...</span>
+            <span className="text-lg font-semibold">Please Wait Zanab...</span>
         </div>
     );
 }
