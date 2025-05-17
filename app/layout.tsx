@@ -4,6 +4,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Sidebar from "@/components/sidebar";
+import "./globals.css"; import { Toaster } from "sonner";
+import { AuthProvider } from "@/context/AuthContext";
+
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +22,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <TopLoader />
         <AuthProvider>
           <ThemeProvider
             attribute="class"
@@ -40,8 +45,4 @@ export default function RootLayout({
     </html>
   );
 }
-
-import "./globals.css"; import { Toaster } from "sonner";
-import { AuthProvider } from "@/context/AuthContext";
-import TopLoader from "@/components/TopLoader";
 
