@@ -14,7 +14,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
   const limit = parseInt(params.limit ?? "50", 10);
   const search = params.search || "";
 
-  const memberData = await fetcher(`/member?sortBy=id&sortOrder=asc&limit=${limit}&page=${page}&searchTerm=${search}`, { revalidate: revalidationTime })
+  const memberData = await fetcher(`/member?sortBy=id&sortOrder=asc&limit=${limit}&page=${page}&searchTerm=${search}`, { revalidate: revalidationTime, nextTags: ['/members'] })
 
   return (
     <PageTransition>

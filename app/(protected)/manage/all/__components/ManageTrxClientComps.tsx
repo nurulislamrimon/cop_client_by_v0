@@ -82,7 +82,7 @@ export default function ManageTrxClientComps({
       if (trxType && trxType !== "all") query += "&trx_type=" + trxType;
       if (memberId) query += "&member_id=" + memberId;
 
-      const data = await fetcher(query, { authToken: accessToken });
+      const data = await fetcher(query, { authToken: accessToken, nextTags: ['/manage'] });
       setTransactions(data?.data || []);
       setTotal(data?.meta?.total || 0);
       setLoading(false);

@@ -1,5 +1,5 @@
 import { fetcher } from '@/server_actions/fetcher';
-import EditMemberForm from './__components/EditMemberForm';
+import EditProfileForm from './__components/EditMemberForm';
 import { cookies } from 'next/headers';
 
 export default async function EditMemberPage({ params }: { params: Promise<{ id: string }> }) {
@@ -15,5 +15,5 @@ export default async function EditMemberPage({ params }: { params: Promise<{ id:
         delete memberData.data.transaction_snapshot
     }
 
-    return <EditMemberForm member={memberData?.data} accessToken={accessToken} />
+    return <EditProfileForm member={memberData?.data} accessToken={accessToken} />
 }

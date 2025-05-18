@@ -72,6 +72,7 @@ export default function AddTransactionPage({ accessToken }: { accessToken?: stri
                     collected_at: formData.collected_at
                 },
                 revalidatePaths: ["/", "/finance"],
+                revalidateTags: ['/manage']
             });
 
             if (!result?.success) {

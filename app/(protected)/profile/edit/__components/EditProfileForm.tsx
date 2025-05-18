@@ -30,7 +30,7 @@ interface Member {
     profile_photo_url?: string;
 }
 
-export default function EditMemberForm({
+export default function EditProfileForm({
     accessToken,
     member = {},
 }: {
@@ -75,6 +75,7 @@ export default function EditMemberForm({
                     profile_photo: fileName || "",
                 },
                 revalidatePaths: ["/", `/members/${member.id}`, "/members", "/profile"],
+                revalidateTags: ['/members']
             });
 
             if (!result?.success) {

@@ -75,6 +75,7 @@ export default function EditMemberForm({
                     profile_photo: fileName || "",
                 },
                 revalidatePaths: ["/", `/members/${member.id}`, "/members"],
+                revalidateTags: ['/members']
             });
 
             if (!result?.success) {

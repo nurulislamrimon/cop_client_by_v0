@@ -52,7 +52,7 @@ export default function ManageOverviewClientComps({
           query += `&searchTerm=${search}`;
         }
 
-        const response = await fetcher(query, { authToken: accessToken });
+        const response = await fetcher(query, { authToken: accessToken, nextTags: ['/manage'] });
         setData(response?.data?.individuals || []);
         setGrandTotal(response?.data?.grandTotal || null);
       } catch (err) {
@@ -110,11 +110,10 @@ export default function ManageOverviewClientComps({
                   <div>
                     Total Balance:{" "}
                     <span
-                      className={`font-semibold ${
-                        grandTotal.total_balance >= 0
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
+                      className={`font-semibold ${grandTotal.total_balance >= 0
+                        ? "text-green-600"
+                        : "text-red-600"
+                        }`}
                     >
                       {grandTotal.total_balance}
                     </span>
@@ -136,11 +135,10 @@ export default function ManageOverviewClientComps({
                   <div className="text-sm text-gray-700 font-semibold">
                     💰 Balance:{" "}
                     <span
-                      className={`${
-                        item.balance || 0 >= 0
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
+                      className={`${item.balance || 0 >= 0
+                        ? "text-green-600"
+                        : "text-red-600"
+                        }`}
                     >
                       {item.balance || 0}
                     </span>

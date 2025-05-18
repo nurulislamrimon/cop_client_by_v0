@@ -87,6 +87,7 @@ export default function EditTransactionForm({ initialData, accessToken }: Update
                     collected_at: formData.collected_at
                 },
                 revalidatePaths: ["/", "/finance"],
+                revalidateTags: ['/manage']
             });
 
             if (!result?.success) {

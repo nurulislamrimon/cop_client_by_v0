@@ -84,6 +84,7 @@ export default function AddMemberForm({
           profile_photo: fileName || "",
         },
         revalidatePaths: ["/", "/members"],
+        revalidateTags: ['/members']
       });
 
       if (!result?.success) {
