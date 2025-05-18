@@ -1,5 +1,5 @@
 import { fetcher } from '@/server_actions/fetcher';
-import EditProfileForm from './__components/EditMemberForm';
+import EditProfileForm from './__components/EditProfileForm';
 import { cookies } from 'next/headers';
 
 export default async function EditMemberPage({ params }: { params: Promise<{ id: string }> }) {
